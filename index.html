@@ -198,7 +198,9 @@ function AccountDatabase(name, year) {
 		this.template_yearly.push({name: name, amount: amount});
 	};
 	
-	this.addTransaction = function(date, name, type, amount) {
+	this.addTransaction = function(dateInput, name, type, amount) {
+		// Get the highest id in the database, then the newly added trx 
+		// would plus one that id.
 		let frontid;
 		if (this.transactions.length == 0) {
 			frontid = 0;
@@ -206,9 +208,19 @@ function AccountDatabase(name, year) {
 			this.transactions.sort(function(a, b) { return b.id - a.id});
 			frontid = this.transactions[0].id;
 		}
+		//console.log(dateInput);
+		
+		let date = new Date(dateInput);
+		if (date.toString() === "Invalid Date") {
+			alert("Invalid Date Format");
+			console.log(dateInput);
+			return;
+		}
+		
+		//console.log(date);
 		this.transactions.push({
 			id: (frontid + 1),
-			date: date,
+			date: date.setFullYear(this.year) / 1000,
 			name: name,
 			type: type,
 			amount: amount
@@ -232,13 +244,23 @@ function AccountDatabase(name, year) {
 	this.deleteTrx = function(id) {
 		this.transactions = this.transactions.filter(function(a) { return a.id !== id; });
 	}
+	
+	this.getDateString = function(trx) {
+		let d = new Date(trx.date * 1000);
+		return d.toLocaleDateString()
+				.split(/[-./]/g)
+				.filter((a) => a < 32)
+				.join(d.toLocaleDateString().match(/[-./]/g)[0]);
+	}
 }
 
 function accountDatabaseFromFile(o) {
 	let accountDB = new AccountDatabase(o.name, o.year);
+	if (typeof(o.currency) !== 'undefined')
+		accountDB.currency = o.currency;
 	o.transactions.forEach(function(curr) {
 		accountDB.addTransaction(
-				curr.date, 
+				curr.date * 1000, 
 				curr.name,
 				curr.type,
 				curr.amount);
@@ -265,8 +287,8 @@ $(document).ready(function() {
 	});
 	
 	// initialize New form
-	$("input#new-year").val(today.getFullYear());
 	$("input#new-name").val("You");
+	$("input#new-year").val(today.getFullYear());
 	
 	$("select#new-date-format").change(function(e) {
 		$("td#new-date-format-detail").text($(this).val());
@@ -282,13 +304,42 @@ $(document).ready(function() {
 		}
 	});
 	
-	// initialize the spreadsheet
+	// initialize and create the spreadsheet
 	$("button#new-create").click(function(e) {
 		//let accountnew = accountDatabaseFromFile(jsondb);
 		//jsondb = accountnew;
 		jsondb = new AccountDatabase(
 			$("input#new-name").val(),
 			$("input#new-year").val());
+		
+		let startingMonth = $("input#new-month").val();
+		let startingDate = new Date();
+		startingDate.setFullYear(
+			jsondb.year,
+			(startingMonth === "" ? 0 : startingMonth - 1),
+			1
+		);
+		
+		let startingBalance = $("input#new-balance").val();
+		if (startingBalance !== '') {
+			jsondb.addTransaction(
+				startingDate.toLocaleDateString() ,
+				"carryover balance" ,
+				"income" ,
+				startingBalance);
+		}
+		
+		let startingObligation = $("input#new-debt").val();
+		if (startingObligation !== '') {
+			jsondb.addTransaction(
+				startingDate.toLocaleDateString() ,
+				"carryover obligation",
+				"obligation",
+				startingObligation);
+		}
+		
+		jsondb.currency = $("input#new-currency").val();
+		
 		populateSheetTables();
 		$("h1#sheet-title").text(
 			$("input#new-name").val() + " " +
@@ -314,7 +365,7 @@ $(document).ready(function() {
 			}
 			
 			$("p#load-preview").text(
-				"Name : " + data.name +
+				"Name: " + data.name +
 				"\nYear: " + data.year +
 				"\nNumber of transaction records: " + data.transactions.length
 			);
@@ -406,9 +457,7 @@ function populateSheetTables(types) {
 				currentMonthTrx.forEach(function(curr) {
 					let row = document.createElement("tr");
 					$(row).append(
-						$(document.createElement("td")).text(
-							new Date(curr.date * 1000).toLocaleDateString(0,-5).slice(0,-5)
-						),
+						$(document.createElement("td")).text(jsondb.getDateString(curr)),
 						$(document.createElement("td")).text(curr.name),
 						$(document.createElement("td")).addClass("text-code")
 							.text(Number(curr.amount).toFixed(2)),
@@ -438,12 +487,13 @@ function populateSheetTables(types) {
 	});
 	
 	$("#sheet-gross-worth").text(
-		jsondb.currency + (Number($("#sheet-income-total").text()) - 
+		jsondb.currency + " " + (Number($("#sheet-income-total").text()) - 
 				Number($("#sheet-expense-total").text())).toFixed(2)
 	);
 	
 	$("#sheet-net-worth").text(
-		jsondb.currency + (Number($("#sheet-gross-worth").text()) + 
+		jsondb.currency + " " + (
+				Number($("#sheet-gross-worth").text().replaceAll(jsondb.currency, "")) + 
 				Number($("#sheet-obligation-total").text())).toFixed(2)
 	);
 }
@@ -639,7 +689,7 @@ function download(data, filename, type) {
 </div>
 <div id="section-load">
 	<h1>Load a previously saved spreadsheet</h1>
-	It should be a <span class="text-code">.json</span> file:<br>
+	<p>It should be a <span class="text-code">.json</span> file:</p>
 	<input type="file" id="load-file" accept=".json">
 	<p id="load-preview"></p>
 	<p>Make sure you have saved/downloaded any active spreadsheet,
