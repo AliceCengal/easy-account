@@ -172,6 +172,8 @@ const today = new Date();
 var jsondb = {
 	name: "You",
 	year: "2022",
+	currency: "",
+	colorTheme: 'deep-purple',
 	template_monthly: [
 		{	name: "", amount: ""	}
 	],
@@ -189,6 +191,7 @@ function AccountDatabase(name, year) {
 	this.template_yearly = [];
 	this.transactions = [];
 	this.currency = "";
+	this.colorTheme = "deep-purple";
 	
 	this.addMonthlyExpense = function(name, amount) {
 		this.template_monthly.push({name: name, amount: amount});
@@ -256,8 +259,9 @@ function AccountDatabase(name, year) {
 
 function accountDatabaseFromFile(o) {
 	let accountDB = new AccountDatabase(o.name, o.year);
-	if (typeof(o.currency) !== 'undefined')
-		accountDB.currency = o.currency;
+	if (typeof(o.currency) !== 'undefined') 	accountDB.currency = o.currency;
+	if (typeof(o.colorTheme) !== 'undefined') 	accountDB.colorTheme = o.colorTheme;
+	
 	o.transactions.forEach(function(curr) {
 		accountDB.addTransaction(
 				curr.date * 1000, 
@@ -294,14 +298,10 @@ $(document).ready(function() {
 		$("td#new-date-format-detail").text($(this).val());
 	});
 	
+	// Dynamically swap the page's stylesheet
 	$("select#new-color-theme").change(function(e) {
-		let colorTheme = $(this).val();
-		if (colorTheme === "none") {
-			$("#w3-theme-color").attr("href", "");
-		} else {
-			$("#w3-theme-color").attr("href", 
-				"https://www.w3schools.com/lib/w3-theme-" + colorTheme + ".css");
-		}
+		jsondb.colorTheme = $(this).val();
+		swapColorTheme(jsondb.colorTheme);
 	});
 	
 	// initialize and create the spreadsheet
@@ -339,6 +339,7 @@ $(document).ready(function() {
 		}
 		
 		jsondb.currency = $("input#new-currency").val();
+		jsondb.colorTheme = $("select#new-color-theme").val();
 		
 		populateSheetTables();
 		$("h1#sheet-title").text(
@@ -370,11 +371,20 @@ $(document).ready(function() {
 				"\nNumber of transaction records: " + data.transactions.length
 			);
 			
+			// Load the file content into the db object and switch to
+			// the spreadsheet page
 			$("button#load-create").click(function(e) {
+				
+				// create the DB object
 				jsondb = accountDatabaseFromFile(data);
+				
+				// fill in the spreadsheet
 				populateSheetTables();
 				$("h1#sheet-title").text(
 					data.name + " " + data.year);
+				swapColorTheme(jsondb.colorTheme);
+				
+				// change page
 				sectionChange("sheet");
 				$("button#h-sheet").prop("disabled", false);
 			});
@@ -437,6 +447,13 @@ $(document).ready(function() {
 	$("button#sheet-options").click(function(e) {
 		populateSheetTables();
 	});
+});
+
+$(window).on('hashchange', function(e) {
+	// handle the URI hash mark
+	if (location.hash !== '') {
+		sectionChange(location.hash.substring(3));
+	}
 });
 
 function populateSheetTables(types) {
@@ -503,12 +520,14 @@ function populateSheetTables(types) {
 	);
 }
 
-$(window).on('hashchange', function(e) {
-	// handle the URI hash mark
-	if (location.hash !== '') {
-		sectionChange(location.hash.substring(3));
+function swapColorTheme(colorTheme) {
+	if (colorTheme === "none") {
+		$("#w3-theme-color").attr("href", "");
+	} else {
+		$("#w3-theme-color").attr("href", 
+			"https://www.w3schools.com/lib/w3-theme-" + colorTheme + ".css");
 	}
-});
+}
 
 function sumjq(selector) {
 	var sum = 0;
@@ -649,11 +668,6 @@ function download(data, filename, type) {
 			<input type="text" id="new-name" value="You"></td></tr>
 		<tr><td>Year</td><td>:</td><td>
 			<input type="text" id="new-year"></td></tr>
-		<tr><td>Date format</td><td>:</td><td>
-			<select id="new-date-format">
-				<option value="DD/MM" selected="selected">Standard</option>
-				<option value="MM/DD">Backward</option>
-			</select></td><td id="new-date-format-detail">DD/MM</td></tr>
 		<tr class="firstline"><td></td><td></td><td></td></tr>
 		<tr><td>Current Balance</td><td>:</td><td>
 			<input type="text" id="new-balance" placeholder="optional"></td></tr>
@@ -661,7 +675,7 @@ function download(data, filename, type) {
 			<input type="text" id="new-debt" placeholder="optional"></td></tr>
 		<tr><td>Starting month</td><td>:</td><td>
 			<input type="text" id="new-month" placeholder="optional: 1, 2, 3, ..."></td></tr>
-		<tr><td>Currency</td><td>:</td><td>
+		<tr><td>Currency label</td><td>:</td><td>
 			<input type="text" id="new-currency" placeholder="optional"></td></tr>
 		<tr><td>Colour theme</td><td>:</td><td>
 			<select id="new-color-theme">
@@ -717,7 +731,7 @@ function download(data, filename, type) {
 <div id="section-help">
 	<h1>Help for you</h1>
 	<h4>Q: How do I edit or delete an entry?</h4>
-	<p>DOUBLE-CLICK the row that you want to edit or delete. That row will be deleted 
+	<p>A: DOUBLE-CLICK the row that you want to edit or delete. That row will be deleted 
 	and its details will be copied to the input row above it. You can edit that input row 
 	and press ENTER (or CLICK the &plus; button) to resubmit the edit, or ignore it for 
 	a full delete.</p>
