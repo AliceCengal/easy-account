@@ -393,31 +393,35 @@ $(document).ready(function() {
 	["income", "expense", "obligation"].forEach(function(currType) {
 		$("button#sheet-add-" + currType).click(function(e) {
 			let transactionDateInput = $("input#sheet-new-" + currType + "-date").val();
-			let transactionDate;
-			if (transactionDateInput === "") {
-				transactionDate = today.getTime() / 1000;
-			} else {
-				let d = new Date(transactionDateInput + "/" + jsondb.year);
-				if (d.toString() === "Invalid Date") {
-					transactionDate = today.getTime() / 1000;
+			let transactionDate = (function() {
+				if (transactionDateInput === "") {
+					return today.getLocaleDateString();
 				} else {
-					transactionDate = d.getTime() / 1000;
+					let d = new Date(transactionDateInput);
+					if (d.toString() === "Invalid Date") {
+						return today.getLocaleDateString();
+					} else {
+						return d.setFullYear(jsondb.year);
+					}
 				}
-			}
+			})();
 			
 			let transactionAmountInput = $("input#sheet-new-" + currType + "-amount").val();
-			let transactionAmount;
-			if (transactionAmountInput === "") {
-				transactionAmount = "0";
-			} else {
-				transactionAmount = transactionAmountInput;
-			}
+			let transactionAmount = (function() {
+				if (transactionAmountInput === "") {
+					return "0";
+				} else {
+					return transactionAmountInput;
+				}
+			})();
+			
 			jsondb.addTransaction(
 				transactionDate,
 				$("input#sheet-new-" + currType + "-detail").val(),
 				currType,
 				transactionAmount
 			);
+			
 			//populateSheetTables(currType);
 			populateSheetTables();
 		});
@@ -452,7 +456,6 @@ function populateSheetTables(types) {
 			if (currentMonthTrx.length === 0) {
 				// no trx this month, skip
 				if (jsondb.isThisMonthTrx(currMonth) > 0) tableRowGroup++;
-				return;
 			} else {
 				currentMonthTrx.forEach(function(curr) {
 					let row = document.createElement("tr");
@@ -463,10 +466,7 @@ function populateSheetTables(types) {
 							.text(Number(curr.amount).toFixed(2)),
 					);
 					$(row).dblclick(function(e) {
-						console.log("Double clicked trx " + curr.id);
-						//console.log(e);
-						//console.log(this);
-						//console.log();
+						//console.log("Double clicked trx " + curr.id);
 						$("input#sheet-new-" + currType + "-date")
 							.val($(this).children().first().text());
 						$("input#sheet-new-" + currType + "-detail").val(curr.name);
@@ -480,6 +480,11 @@ function populateSheetTables(types) {
 				tableRowGroup++;
 			}
 		});
+		
+		while (tableRowGroup <= 11) {
+			$("table#sheet-" + currType + "-table-" + tableRowGroup).empty();
+			tableRowGroup++;
+		}
 		
 		$("#sheet-" + currType + "-total").text(
 			sumjq("table[id^='sheet-" + currType + "-table-'] td:last-child").toFixed(2)
