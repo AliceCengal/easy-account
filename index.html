@@ -282,49 +282,49 @@ function AccountDatabase(name, year) {
                 .filter((a) => a < 32)
                 .join(d.toLocaleDateString().match(/[-./]/g)[0]);
     };
-	
-	this.calculateWorthByDay = function() {
-		let nwbd = Array(365).fill(0);
-		let gwbd = Array(365).fill(0);
-		let dateIter = new Date();
-		dateIter.setFullYear(this.year, 0, 1);
-		let trxIter = Array.from(this.transactions).reverse();
-		//console.log(trxIter.length);
-		gwbd.forEach(function(curr, ix, arr) {
-			//console.log(ix + " : " + dateIter.toLocaleDateString());
-			if (trxIter.length === 0) return;
-			
-			let grossworth = 0;
-			let networth = 0;
-			while (true) {
-				//console.log(trxIter[0]);
-				let d = new Date( trxIter[0].date * 1000  );
-				
-				if (d.getMonth() === dateIter.getMonth() && 
+    
+    this.calculateWorthByDay = function() {
+        let nwbd = Array(365).fill(0);
+        let gwbd = Array(365).fill(0);
+        let dateIter = new Date();
+        dateIter.setFullYear(this.year, 0, 1);
+        let trxIter = Array.from(this.transactions).reverse();
+        //console.log(trxIter.length);
+        gwbd.forEach(function(curr, ix, arr) {
+            //console.log(ix + " : " + dateIter.toLocaleDateString());
+            if (trxIter.length === 0) return;
+            
+            let grossworth = 0;
+            let networth = 0;
+            while (true) {
+                //console.log(trxIter[0]);
+                let d = new Date( trxIter[0].date * 1000  );
+                
+                if (d.getMonth() === dateIter.getMonth() && 
                     d.getDate() === dateIter.getDate()) {
-					//console.log(d);
-					let trx = trxIter.shift();
-					if (trx.type === "expense") {
-						grossworth -= Number(trx.amount);
-						networth -= Number(trx.amount);
-					} else {
-						grossworth += Number(trx.amount);
-						networth += Number(trx.amount);
-					}
-					
-					if (trxIter.length === 0) break;
-				} else break;
-				
-			}
-			
-			arr[ix] = grossworth;
-			nwbd[ix] = networth;
-			if (ix !== 0) { arr[ix] += arr[ix - 1]; }
-			dateIter.setDate(dateIter.getDate() + 1);
-		});
-		
-		return { gwbd, nwbd };
-	};
+                    //console.log(d);
+                    let trx = trxIter.shift();
+                    if (trx.type === "expense") {
+                        grossworth -= Number(trx.amount);
+                        networth -= Number(trx.amount);
+                    } else {
+                        grossworth += Number(trx.amount);
+                        networth += Number(trx.amount);
+                    }
+                    
+                    if (trxIter.length === 0) break;
+                } else break;
+                
+            }
+            
+            arr[ix] = grossworth;
+            nwbd[ix] = networth;
+            if (ix !== 0) { arr[ix] += arr[ix - 1]; }
+            dateIter.setDate(dateIter.getDate() + 1);
+        });
+        
+        return { gwbd, nwbd };
+    };
 }
 
 function accountDatabaseFromFile(o) {
@@ -413,7 +413,7 @@ $(document).ready(function() {
             $("input#new-name").val() + " " +
             $("input#new-year").val());
         //sectionChange("sheet");
-		location.hash = "h-sheet";
+        location.hash = "h-sheet";
         $("button#h-sheet").prop("disabled", false);
     });
     
@@ -454,7 +454,7 @@ $(document).ready(function() {
                 
                 // change page
                 //sectionChange("sheet");
-				location.hash = "h-sheet";
+                location.hash = "h-sheet";
                 $("button#h-sheet").prop("disabled", false);
             });
         }
@@ -521,8 +521,8 @@ $(document).ready(function() {
 $(window).on('hashchange', function(e) {
     // handle the URI hash mark
     if (location.hash !== '') {
-		$("main > div").hide();
-		$("div#section-" + location.hash.substring(3)).show();
+        $("main > div").hide();
+        $("div#section-" + location.hash.substring(3)).show();
     }
 });
 
