@@ -1,170 +1,169 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta>
 <title>Easy Personal Accounting</title>
 <link id="w3-theme-color" rel="stylesheet" 
-	href="https://www.w3schools.com/lib/w3-theme-deep-purple.css">
+    href="https://www.w3schools.com/lib/w3-theme-deep-purple.css">
 <style>
 html { 
-	height: 100%; 
-	font-family: Helvetica, Arial, sans-serif;
+    height: 100%; 
+    font-family: Helvetica, Arial, sans-serif;
 }
 body {
-	margin: 0px;
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
-	justify-content: flex-start;
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 header {
-	height: 100%;
-	width: 20%;
-	flex-shrink: 0;
-	display: flex;
-	flex-direction: column;
+    height: 100%;
+    width: 20%;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
 }
 header * {
-	text-align: center;
-	padding: 10px;
+    text-align: center;
+    padding: 10px;
 }
 header nav button {
-	display: block;
-	width: 100%;
+    display: block;
+    width: 100%;
 }
-header .spacer1 {			flex-grow: 1;	}
-header div:last-child {		font-size: small;	}
-span#copy-current-year {	padding: 0px;	}
+header .spacer1 {           flex-grow: 1;    }
+header div:last-child {     font-size: small;    }
+span#copy-current-year {    padding: 0px;    }
 main {
-	height: 100%;
-	flex-grow: 1;
-	overflow-y: scroll;
-	overflow-x: hidden;
+    height: 100%;
+    flex-grow: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
-main * {		padding: 10px;	}
-main > div {	display: none; width: 66%;	}
+main * {        padding: 10px;    }
+main > div {    display: none; width: 66%;    }
 div#section-about {
-	display: block;
-	width: 66%;
+    display: block;
+    width: 66%;
 }
-div#section-sheet {					width: 100%;	}
-div ul {							margin-left: 20px;	}
-table {								border-collapse: collapse;	}
-table td {							padding: 5px;	}
-table.sheet-table {					background-color: white;	}
-td.sheet-table-title {				text-align: center !important;	}
-table.sheet-table td:last-child {	text-align: right;	}
+div#section-sheet {                  width: 100%;    }
+div ul {                             margin-left: 20px;    }
+table {                              border-collapse: collapse;    }
+table td {                           padding: 5px;    }
+table.sheet-table {                  background-color: white;    }
+td.sheet-table-title {               text-align: center !important;    }
+table.sheet-table td:last-child {    text-align: right;    }
 .firstline td {
-	padding: 0px;
-	border-bottom: 2px solid gray;
+    padding: 0px;
+    border-bottom: 2px solid gray;
 }
-.topline td {		border-top: 2px solid gray;	}
-.bottomline td {	border-bottom: 2px solid gray;	}
-input {				padding: 5px;	}
-a {					padding: 0px;	}
-strong { 			padding: 0px; }
+.topline td {       border-top: 2px solid gray;    }
+.bottomline td {    border-bottom: 2px solid gray;    }
+input {             padding: 5px;    }
+a {                 padding: 0px;    }
+strong {            padding: 0px; }
 .round-button {
-	padding: 5px;
-	font-size: xx-large;
-	font-weight: bold;
-	border-radius: 50%;
+    padding: 5px;
+    font-size: xx-large;
+    font-weight: bold;
+    border-radius: 50%;
 }
 .round-button-small {
-	padding: 5px;
-	font-size: medium;
-	font-weight: bold;
-	border-radius: 50%;
+    padding: 5px;
+    font-size: medium;
+    font-weight: bold;
+    border-radius: 50%;
 }
-.dropdown-button {	padding: 5px;	}
+.dropdown-button {    padding: 5px;    }
 button#download-download {
-	display: block;
-	margin: 0 auto;
+    display: block;
+    margin: 0 auto;
 }
 div#section-help p { text-align: justify; }
 .text-code {
-	font-family: monospace;
-	font-size: large;
-	white-space: pre;
+    font-family: monospace;
+    font-size: large;
+    white-space: pre;
 }
 .grid-container {
-	width: 100%;
-	margin: 21px 0 0 0;
-	padding: 0px;
-	display: grid;
-	grid-template-columns: auto auto auto 10px;
-	grid-template-rows: auto auto auto auto auto auto 
-			auto auto auto auto auto auto auto auto auto;
-	grid-gap: 10px;
+    width: 100%;
+    margin: 21px 0 0 0;
+    padding: 0px;
+    display: grid;
+    grid-template-columns: auto auto auto 10px;
+    grid-template-rows: auto auto auto auto auto auto 
+            auto auto auto auto auto auto auto auto auto;
+    grid-gap: 10px;
 }
-#sheet-title {	display: inline; margin: 0px; padding: 0px;	}
-#sheet-title-box {	
-	grid-area: 1 / 1 / span 1 / span 1; 
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: flex-end; }
+#sheet-title {    display: inline; margin: 0px; padding: 0px;    }
+#sheet-title-box {    
+    grid-area: 1 / 1 / span 1 / span 1; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end; }
 .sheet-gross-label {
-	grid-area: 1 / 2 / span 1 / span 1;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: flex-end;
+    grid-area: 1 / 2 / span 1 / span 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 .sheet-net-label {
-	grid-area: 1 / 3 / span 1 / span 1;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: flex-end;
+    grid-area: 1 / 3 / span 1 / span 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
 }
-.sheet-table {				margin-bottom: auto; }
-#sheet-income-table {		grid-area: 2 / 1 / span 1 / span 1;	}
-#sheet-expense-table {		grid-area: 2 / 2 / span 1 / span 1; }
-#sheet-obligation-table {	grid-area: 2 / 3 / span 1 / span 1;	}
-#sheet-income-table-0 {		grid-area: 3 / 1 / span 1 / span 1;	}
-#sheet-expense-table-0 {	grid-area: 3 / 2 / span 1 / span 1; }
-#sheet-obligation-table-0 {	grid-area: 3 / 3 / span 1 / span 1;	}
-#sheet-income-table-1 {		grid-area: 4 / 1 / span 1 / span 1;	}
-#sheet-expense-table-1 {	grid-area: 4 / 2 / span 1 / span 1; }
-#sheet-obligation-table-1 {	grid-area: 4 / 3 / span 1 / span 1;	}
-#sheet-income-table-2 {		grid-area: 5 / 1 / span 1 / span 1;	}
-#sheet-expense-table-2 {	grid-area: 5 / 2 / span 1 / span 1; }
-#sheet-obligation-table-2 {	grid-area: 5 / 3 / span 1 / span 1;	}
-#sheet-income-table-3 {		grid-area: 6 / 1 / span 1 / span 1;	}
-#sheet-expense-table-3 {	grid-area: 6 / 2 / span 1 / span 1; }
-#sheet-obligation-table-3 {	grid-area: 6 / 3 / span 1 / span 1;	}
-#sheet-income-table-4 {		grid-area: 7 / 1 / span 1 / span 1;	}
-#sheet-expense-table-4 {	grid-area: 7 / 2 / span 1 / span 1; }
-#sheet-obligation-table-4 {	grid-area: 7 / 3 / span 1 / span 1;	}
-#sheet-income-table-5 {		grid-area: 8 / 1 / span 1 / span 1;	}
-#sheet-expense-table-5 {	grid-area: 8 / 2 / span 1 / span 1; }
-#sheet-obligation-table-5 {	grid-area: 8 / 3 / span 1 / span 1;	}
-#sheet-income-table-6 {		grid-area: 9 / 1 / span 1 / span 1;	}
-#sheet-expense-table-6 {	grid-area: 9 / 2 / span 1 / span 1; }
-#sheet-obligation-table-6 {	grid-area: 9 / 3 / span 1 / span 1;	}
-#sheet-income-table-7 {		grid-area: 10 / 1 / span 1 / span 1;	}
-#sheet-expense-table-7 {	grid-area: 10 / 2 / span 1 / span 1; 	}
-#sheet-obligation-table-7 {	grid-area: 10 / 3 / span 1 / span 1;	}
-#sheet-income-table-8 {		grid-area: 11 / 1 / span 1 / span 1;	}
-#sheet-expense-table-8 {	grid-area: 11 / 2 / span 1 / span 1; 	}
-#sheet-obligation-table-8 {	grid-area: 11 / 3 / span 1 / span 1;	}
-#sheet-income-table-9 {		grid-area: 12 / 1 / span 1 / span 1;	}
-#sheet-expense-table-9 {	grid-area: 12 / 2 / span 1 / span 1; 	}
-#sheet-obligation-table-9 {	grid-area: 12 / 3 / span 1 / span 1;	}
-#sheet-income-table-10 {		grid-area: 13 / 1 / span 1 / span 1;	}
-#sheet-expense-table-10 {		grid-area: 13 / 2 / span 1 / span 1; 	}
-#sheet-obligation-table-10 {	grid-area: 13 / 3 / span 1 / span 1;	}
-#sheet-income-table-11 {		grid-area: 14 / 1 / span 1 / span 1;	}
-#sheet-expense-table-11 {		grid-area: 14 / 2 / span 1 / span 1; 	}
-#sheet-obligation-table-11 {	grid-area: 14 / 3 / span 1 / span 1;	}
+.sheet-table {                 margin-bottom: auto; }
+#sheet-income-table {          grid-area: 2 / 1 / span 1 / span 1;    }
+#sheet-expense-table {         grid-area: 2 / 2 / span 1 / span 1; }
+#sheet-obligation-table {      grid-area: 2 / 3 / span 1 / span 1;    }
+#sheet-income-table-0 {        grid-area: 3 / 1 / span 1 / span 1;    }
+#sheet-expense-table-0 {       grid-area: 3 / 2 / span 1 / span 1; }
+#sheet-obligation-table-0 {    grid-area: 3 / 3 / span 1 / span 1;    }
+#sheet-income-table-1 {        grid-area: 4 / 1 / span 1 / span 1;    }
+#sheet-expense-table-1 {       grid-area: 4 / 2 / span 1 / span 1; }
+#sheet-obligation-table-1 {    grid-area: 4 / 3 / span 1 / span 1;    }
+#sheet-income-table-2 {        grid-area: 5 / 1 / span 1 / span 1;    }
+#sheet-expense-table-2 {       grid-area: 5 / 2 / span 1 / span 1; }
+#sheet-obligation-table-2 {    grid-area: 5 / 3 / span 1 / span 1;    }
+#sheet-income-table-3 {        grid-area: 6 / 1 / span 1 / span 1;    }
+#sheet-expense-table-3 {       grid-area: 6 / 2 / span 1 / span 1; }
+#sheet-obligation-table-3 {    grid-area: 6 / 3 / span 1 / span 1;    }
+#sheet-income-table-4 {        grid-area: 7 / 1 / span 1 / span 1;    }
+#sheet-expense-table-4 {       grid-area: 7 / 2 / span 1 / span 1; }
+#sheet-obligation-table-4 {    grid-area: 7 / 3 / span 1 / span 1;    }
+#sheet-income-table-5 {        grid-area: 8 / 1 / span 1 / span 1;    }
+#sheet-expense-table-5 {       grid-area: 8 / 2 / span 1 / span 1; }
+#sheet-obligation-table-5 {    grid-area: 8 / 3 / span 1 / span 1;    }
+#sheet-income-table-6 {        grid-area: 9 / 1 / span 1 / span 1;    }
+#sheet-expense-table-6 {       grid-area: 9 / 2 / span 1 / span 1; }
+#sheet-obligation-table-6 {    grid-area: 9 / 3 / span 1 / span 1;    }
+#sheet-income-table-7 {        grid-area: 10 / 1 / span 1 / span 1;    }
+#sheet-expense-table-7 {       grid-area: 10 / 2 / span 1 / span 1;     }
+#sheet-obligation-table-7 {    grid-area: 10 / 3 / span 1 / span 1;    }
+#sheet-income-table-8 {        grid-area: 11 / 1 / span 1 / span 1;    }
+#sheet-expense-table-8 {       grid-area: 11 / 2 / span 1 / span 1;     }
+#sheet-obligation-table-8 {    grid-area: 11 / 3 / span 1 / span 1;    }
+#sheet-income-table-9 {        grid-area: 12 / 1 / span 1 / span 1;    }
+#sheet-expense-table-9 {       grid-area: 12 / 2 / span 1 / span 1;     }
+#sheet-obligation-table-9 {    grid-area: 12 / 3 / span 1 / span 1;    }
+#sheet-income-table-10 {       grid-area: 13 / 1 / span 1 / span 1;    }
+#sheet-expense-table-10 {      grid-area: 13 / 2 / span 1 / span 1;     }
+#sheet-obligation-table-10 {   grid-area: 13 / 3 / span 1 / span 1;    }
+#sheet-income-table-11 {       grid-area: 14 / 1 / span 1 / span 1;    }
+#sheet-expense-table-11 {      grid-area: 14 / 2 / span 1 / span 1;     }
+#sheet-obligation-table-11 {   grid-area: 14 / 3 / span 1 / span 1;    }
 .grid-container h4 {
-	display: inline;
-	margin: 0px;
+    display: inline;
+    margin: 0px;
 }
-#load-preview {		white-space: pre; }
+#load-preview {        white-space: pre; }
 
 /* https://www.w3schools.com/css/css_tooltip.asp */
 /* Tooltip container */
@@ -198,401 +197,435 @@ div#section-help p { text-align: justify; }
 <script>
 const today = new Date();
 var jsondb = {
-	name: "You",
-	year: "2022",
-	currency: "",
-	colorTheme: 'deep-purple',
-	template_monthly: [
-		{	name: "", amount: ""	}
-	],
-	template_yearly: [
-		{	name: "", amount: ""	}
-	],
-	transactions: [
-	]
+    name: "You",
+    year: "2022",
+    currency: "",
+    colorTheme: 'deep-purple',
+    template_monthly: [
+        {    name: "", amount: ""    }
+    ],
+    template_yearly: [
+        {    name: "", amount: ""    }
+    ],
+    transactions: [
+    ]
 };
 
 function AccountDatabase(name, year) {
-	this.name = name;
-	this.year = year;
-	this.template_monthly = [];
-	this.template_yearly = [];
-	this.transactions = [];
-	this.currency = "";
-	this.colorTheme = "deep-purple";
+    this.name = name;
+    this.year = year;
+    this.template_monthly = [];
+    this.template_yearly = [];
+    this.transactions = [];
+    this.currency = "";
+    this.colorTheme = "deep-purple";
+    
+    this.addMonthlyExpense = function(name, amount) {
+        this.template_monthly.push({name: name, amount: amount});
+    };
+    
+    this.addYearlyExpense = function(name, amount) {
+        this.template_yearly.push({name: name, amount: amount});
+    };
+    
+    this.addTransaction = function(dateInput, name, type, amount) {
+        // Get the highest id in the database, then the newly added trx 
+        // would plus one that id.
+        let frontid;
+        if (this.transactions.length == 0) {
+            frontid = 0;
+        } else {
+            this.transactions.sort(function(a, b) { return b.id - a.id});
+            frontid = this.transactions[0].id;
+        }
+        //console.log(dateInput);
+        
+        let date = new Date(dateInput);
+        if (date.toString() === "Invalid Date") {
+            alert("Invalid Date Format");
+            console.log(dateInput);
+            return;
+        }
+        
+        //console.log(date);
+        this.transactions.push({
+            id: (frontid + 1),
+            date: date.setFullYear(this.year) / 1000,
+            name: name,
+            type: type,
+            amount: amount
+        });
+        this.transactions.sort(function(a, b) { return b.date - a.date});
+    };
+    
+    this.getTypeForMonth = function(type, month) {
+        return this.transactions.filter(function(a) {
+            let d = new Date(a.date * 1000);
+            return d.getMonth() === month && a.type === type;
+        });
+    };
+    
+    this.isThisMonthTrx = function(month) {
+        return this.transactions.filter(function(a) {
+            return new Date(a.date * 1000).getMonth() === month;
+        }).length;
+    };
+    
+    this.deleteTrx = function(id) {
+        this.transactions = this.transactions.filter(function(a) { return a.id !== id; });
+    };
+    
+    this.getDateString = function(trx) {
+        let d = new Date(trx.date * 1000);
+        return d.toLocaleDateString()
+                .split(/[-./]/g)
+                .filter((a) => a < 32)
+                .join(d.toLocaleDateString().match(/[-./]/g)[0]);
+    };
 	
-	this.addMonthlyExpense = function(name, amount) {
-		this.template_monthly.push({name: name, amount: amount});
-	};
-	
-	this.addYearlyExpense = function(name, amount) {
-		this.template_yearly.push({name: name, amount: amount});
-	};
-	
-	this.addTransaction = function(dateInput, name, type, amount) {
-		// Get the highest id in the database, then the newly added trx 
-		// would plus one that id.
-		let frontid;
-		if (this.transactions.length == 0) {
-			frontid = 0;
-		} else {
-			this.transactions.sort(function(a, b) { return b.id - a.id});
-			frontid = this.transactions[0].id;
-		}
-		//console.log(dateInput);
-		
-		let date = new Date(dateInput);
-		if (date.toString() === "Invalid Date") {
-			alert("Invalid Date Format");
-			console.log(dateInput);
-			return;
-		}
-		
-		//console.log(date);
-		this.transactions.push({
-			id: (frontid + 1),
-			date: date.setFullYear(this.year) / 1000,
-			name: name,
-			type: type,
-			amount: amount
+	this.calculateWorthByDay = function() {
+		let nwbd = Array(365).fill(0);
+		let gwbd = Array(365).fill(0);
+		let dateIter = new Date();
+		dateIter.setFullYear(this.year, 0, 1);
+		let trxIter = Array.from(this.transactions).reverse();
+		//console.log(trxIter.length);
+		gwbd.forEach(function(curr, ix, arr) {
+			//console.log(ix + " : " + dateIter.toLocaleDateString());
+			if (trxIter.length === 0) return;
+			
+			let grossworth = 0;
+			let networth = 0;
+			while (true) {
+				//console.log(trxIter[0]);
+				let d = new Date( trxIter[0].date * 1000  );
+				
+				if (d.getMonth() === dateIter.getMonth() && 
+                    d.getDate() === dateIter.getDate()) {
+					//console.log(d);
+					let trx = trxIter.shift();
+					if (trx.type === "expense") {
+						grossworth -= Number(trx.amount);
+						networth -= Number(trx.amount);
+					} else {
+						grossworth += Number(trx.amount);
+						networth += Number(trx.amount);
+					}
+					
+					if (trxIter.length === 0) break;
+				} else break;
+				
+			}
+			
+			arr[ix] = grossworth;
+			nwbd[ix] = networth;
+			if (ix !== 0) { arr[ix] += arr[ix - 1]; }
+			dateIter.setDate(dateIter.getDate() + 1);
 		});
-		this.transactions.sort(function(a, b) { return b.date - a.date});
+		
+		return { gwbd, nwbd };
 	};
-	
-	this.getTypeForMonth = function(type, month) {
-		return this.transactions.filter(function(a) {
-			let d = new Date(a.date * 1000);
-			return d.getMonth() === month && a.type === type;
-		});
-	};
-	
-	this.isThisMonthTrx = function(month) {
-		return this.transactions.filter(function(a) {
-			return new Date(a.date * 1000).getMonth() === month;
-		}).length;
-	};
-	
-	this.deleteTrx = function(id) {
-		this.transactions = this.transactions.filter(function(a) { return a.id !== id; });
-	}
-	
-	this.getDateString = function(trx) {
-		let d = new Date(trx.date * 1000);
-		return d.toLocaleDateString()
-				.split(/[-./]/g)
-				.filter((a) => a < 32)
-				.join(d.toLocaleDateString().match(/[-./]/g)[0]);
-	}
 }
 
 function accountDatabaseFromFile(o) {
-	let accountDB = new AccountDatabase(o.name, o.year);
-	if (typeof(o.currency) !== 'undefined') 	accountDB.currency = o.currency;
-	if (typeof(o.colorTheme) !== 'undefined') 	accountDB.colorTheme = o.colorTheme;
-	
-	o.transactions.forEach(function(curr) {
-		accountDB.addTransaction(
-				curr.date * 1000, 
-				curr.name,
-				curr.type,
-				curr.amount);
-	});
-	return accountDB;
+    let accountDB = new AccountDatabase(o.name, o.year);
+    if (typeof(o.currency) !== 'undefined')       accountDB.currency = o.currency;
+    if (typeof(o.colorTheme) !== 'undefined')     accountDB.colorTheme = o.colorTheme;
+    
+    o.transactions.forEach(function(curr) {
+        accountDB.addTransaction(
+                curr.date * 1000, 
+                curr.name,
+                curr.type,
+                curr.amount);
+    });
+    return accountDB;
 }
 
 $(document).ready(function() {
-	// set current year to the copyright statement
-	$("span#copy-current-year").text(today.getFullYear());
-	
-	// setup styling
-	$("button").addClass("w3-hover-theme").addClass("w3-theme-l4");
-	$("main h1").addClass("w3-text-theme");
-	
-	// handle the URI hash mark
-	if (location.hash !== '') sectionChange(location.hash.substring(3));
-	
-	// handle sidebar navigation
-	$("header nav button").click(function(e) {
-		//console.log(e);
-		sectionChange(e.currentTarget.id.substring(2));
-		location.hash = "";
-	});
-	
-	// initialize New form
-	$("input#new-name").val("You");
-	$("input#new-year").val(today.getFullYear());
-	
-	// The user's browser have different formats for date input and output
-	// This will show a hint to the user to how they should write their date
-	$("input#new-date-fmt").val(
-		today.toLocaleDateString()
-			.split(/[-./]/g)
-			.filter((a) => a < 32)
-			.join(today.toLocaleDateString().match(/[-./]/g)[0]));
-	
-	// Dynamically swap the page's stylesheet
-	$("select#new-color-theme").change(function(e) {
-		jsondb.colorTheme = $(this).val();
-		swapColorTheme(jsondb.colorTheme);
-	});
-	
-	// initialize and create the spreadsheet
-	$("button#new-create").click(function(e) {
-		//let accountnew = accountDatabaseFromFile(jsondb);
-		//jsondb = accountnew;
-		jsondb = new AccountDatabase(
-			$("input#new-name").val(),
-			$("input#new-year").val());
-		
-		let startingMonth = $("input#new-month").val();
-		let startingDate = new Date();
-		startingDate.setFullYear(
-			jsondb.year,
-			(startingMonth === "" ? 0 : startingMonth - 1),
-			1
-		);
-		
-		let startingBalance = $("input#new-balance").val();
-		if (startingBalance !== '') {
-			jsondb.addTransaction(
-				startingDate.toLocaleDateString() ,
-				"carryover balance" ,
-				"income" ,
-				startingBalance);
-		}
-		
-		let startingObligation = $("input#new-debt").val();
-		if (startingObligation !== '') {
-			jsondb.addTransaction(
-				startingDate.toLocaleDateString() ,
-				"carryover obligation",
-				"obligation",
-				startingObligation);
-		}
-		
-		jsondb.currency = $("input#new-currency").val();
-		jsondb.colorTheme = $("select#new-color-theme").val();
-		
-		populateSheetTables();
-		$("h1#sheet-title").text(
-			$("input#new-name").val() + " " +
-			$("input#new-year").val());
-		sectionChange("sheet");
-		$("button#h-sheet").prop("disabled", false);
-	});
-	
-	// Load form
-	$("input#load-file").change(function(e) {
-		//console.log("file chosen");
-		//console.log(e.currentTarget.value);
-		
-		let fr = new FileReader();
-		fr.onload = function() {
-			let data;
-			try {
-				data = JSON.parse(fr.result);
-			} catch (err) {
-				console.log(err);
-				alert("Invalid file.");
-				return;
-			}
-			
-			$("p#load-preview").text(
-				"Name: " + data.name +
-				"\nYear: " + data.year +
-				"\nNumber of transaction records: " + data.transactions.length
-			);
-			
-			// Load the file content into the db object and switch to
-			// the spreadsheet page
-			$("button#load-create").click(function(e) {
-				
-				// create the DB object
-				jsondb = accountDatabaseFromFile(data);
-				
-				// fill in the spreadsheet
-				populateSheetTables();
-				$("h1#sheet-title").text(
-					data.name + " " + data.year);
-				swapColorTheme(jsondb.colorTheme);
-				
-				// change page
-				sectionChange("sheet");
-				$("button#h-sheet").prop("disabled", false);
-			});
-		}
-		fr.readAsText(this.files[0]);
-	});
-	
-	// Download form
-	$("button#download-download").click(function(e) {
-		download(JSON.stringify(jsondb), 
-				jsondb.name + "-" + jsondb.year, 
-				"application/json");
-	});
-	
-	// Spreadsheet section
-	["income", "expense", "obligation"].forEach(function(currType) {
-		$("button#sheet-add-" + currType).click(function(e) {
-			let transactionDateInput = $("input#sheet-new-" + currType + "-date").val();
-			let transactionDate = (function() {
-				if (transactionDateInput === "") {
-					return today.getLocaleDateString();
-				} else {
-					let d = new Date(transactionDateInput);
-					if (d.toString() === "Invalid Date") {
-						return today.getLocaleDateString();
-					} else {
-						return d.setFullYear(jsondb.year);
-					}
-				}
-			})();
-			
-			let transactionAmountInput = $("input#sheet-new-" + currType + "-amount").val();
-			let transactionAmount = (function() {
-				if (transactionAmountInput === "") {
-					return "0";
-				} else {
-					return transactionAmountInput;
-				}
-			})();
-			
-			jsondb.addTransaction(
-				transactionDate,
-				$("input#sheet-new-" + currType + "-detail").val(),
-				currType,
-				transactionAmount
-			);
-			
-			//populateSheetTables(currType);
-			populateSheetTables();
-		});
-		
-		$("table#sheet-" + currType + "-table input").on("keyup", function(e) {
-			if (e.which == 13) {
-				e.preventDefault();
-				$("button#sheet-add-" + currType).click();
-			}
-		});
-	});
-	
-	$("button#sheet-options").click(function(e) {
-		populateSheetTables();
-	});
+    // set current year to the copyright statement
+    $("span#copy-current-year").text(today.getFullYear());
+    
+    // setup styling
+    $("button").addClass("w3-hover-theme").addClass("w3-theme-l4");
+    $("main h1").addClass("w3-text-theme");
+    
+    // handle the URI hash mark
+    if (location.hash !== '') sectionChange(location.hash.substring(3));
+
+    // initialize New form
+    $("input#new-name").val("You");
+    $("input#new-year").val(today.getFullYear());
+    
+    // The user's browser have different formats for date input and output
+    // This will show a hint to the user to how they should write their date
+    $("input#new-date-fmt").val(
+        today.toLocaleDateString()
+            .split(/[-./]/g)
+            .filter((a) => a < 32)
+            .join(today.toLocaleDateString().match(/[-./]/g)[0]));
+    
+    // Dynamically swap the page's stylesheet
+    $("select#new-color-theme").change(function(e) {
+        jsondb.colorTheme = $(this).val();
+        swapColorTheme(jsondb.colorTheme);
+    });
+    
+    // initialize and create the spreadsheet
+    $("button#new-create").click(function(e) {
+        //let accountnew = accountDatabaseFromFile(jsondb);
+        //jsondb = accountnew;
+        jsondb = new AccountDatabase(
+            $("input#new-name").val(),
+            $("input#new-year").val());
+        
+        let startingMonth = $("input#new-month").val();
+        let startingDate = new Date();
+        startingDate.setFullYear(
+            jsondb.year,
+            (startingMonth === "" ? 0 : startingMonth - 1),
+            1
+        );
+        
+        let startingBalance = $("input#new-balance").val();
+        if (startingBalance !== '') {
+            jsondb.addTransaction(
+                startingDate.toLocaleDateString() ,
+                "carryover balance" ,
+                "income" ,
+                startingBalance);
+        }
+        
+        let startingObligation = $("input#new-debt").val();
+        if (startingObligation !== '') {
+            jsondb.addTransaction(
+                startingDate.toLocaleDateString() ,
+                "carryover obligation",
+                "obligation",
+                startingObligation);
+        }
+        
+        jsondb.currency = $("input#new-currency").val();
+        jsondb.colorTheme = $("select#new-color-theme").val();
+        
+        populateSheetTables();
+        $("h1#sheet-title").text(
+            $("input#new-name").val() + " " +
+            $("input#new-year").val());
+        //sectionChange("sheet");
+		location.hash = "h-sheet";
+        $("button#h-sheet").prop("disabled", false);
+    });
+    
+    // Load form
+    $("input#load-file").change(function(e) {
+        //console.log("file chosen");
+        //console.log(e.currentTarget.value);
+        
+        let fr = new FileReader();
+        fr.onload = function() {
+            let data;
+            try {
+                data = JSON.parse(fr.result);
+            } catch (err) {
+                console.log(err);
+                alert("Invalid file.");
+                return;
+            }
+            
+            $("p#load-preview").text(
+                "Name: " + data.name +
+                "\nYear: " + data.year +
+                "\nNumber of transaction records: " + data.transactions.length
+            );
+            
+            // Load the file content into the db object and switch to
+            // the spreadsheet page
+            $("button#load-create").click(function(e) {
+                
+                // create the DB object
+                jsondb = accountDatabaseFromFile(data);
+                
+                // fill in the spreadsheet
+                populateSheetTables();
+                $("h1#sheet-title").text(
+                    data.name + " " + data.year);
+                swapColorTheme(jsondb.colorTheme);
+                
+                // change page
+                //sectionChange("sheet");
+				location.hash = "h-sheet";
+                $("button#h-sheet").prop("disabled", false);
+            });
+        }
+        fr.readAsText(this.files[0]);
+    });
+    
+    // Download form
+    $("button#download-download").click(function(e) {
+        download(JSON.stringify(jsondb), 
+                jsondb.name + "-" + jsondb.year, 
+                "application/json");
+    });
+    
+    // Spreadsheet section
+    ["income", "expense", "obligation"].forEach(function(currType) {
+        $("button#sheet-add-" + currType).click(function(e) {
+            let transactionDateInput = $("input#sheet-new-" + currType + "-date").val();
+            let transactionDate = (function() {
+                if (transactionDateInput === "") {
+                    return today.getLocaleDateString();
+                } else {
+                    let d = new Date(transactionDateInput);
+                    if (d.toString() === "Invalid Date") {
+                        return today.getLocaleDateString();
+                    } else {
+                        return d.setFullYear(jsondb.year);
+                    }
+                }
+            })();
+            
+            let transactionAmountInput = $("input#sheet-new-" + currType + "-amount").val();
+            let transactionAmount = (function() {
+                if (transactionAmountInput === "") {
+                    return "0";
+                } else {
+                    return transactionAmountInput;
+                }
+            })();
+            
+            jsondb.addTransaction(
+                transactionDate,
+                $("input#sheet-new-" + currType + "-detail").val(),
+                currType,
+                transactionAmount
+            );
+            
+            //populateSheetTables(currType);
+            populateSheetTables();
+        });
+        
+        $("table#sheet-" + currType + "-table input").on("keyup", function(e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                $("button#sheet-add-" + currType).click();
+            }
+        });
+    });
+    
+    $("button#sheet-options").click(function(e) {
+        populateSheetTables();
+    });
 });
 
 $(window).on('hashchange', function(e) {
-	// handle the URI hash mark
-	if (location.hash !== '') {
-		sectionChange(location.hash.substring(3));
-	}
+    // handle the URI hash mark
+    if (location.hash !== '') {
+		$("main > div").hide();
+		$("div#section-" + location.hash.substring(3)).show();
+    }
 });
 
 function populateSheetTables(types) {
-	let refreshTable;
-	if (typeof types == 'undefined') {
-		refreshTable = ["income", "expense", "obligation"];
-	} else if (typeof types === 'string') {
-		refreshTable = [types];
-	} else {
-		refreshTable = types;
-	}
-	refreshTable.forEach(function(currType) {
-		var tableRowGroup = 0;
-		[11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0].forEach(function(currMonth) {
-			$("table#sheet-" + currType + "-table-" + tableRowGroup).empty();
-			let currentMonthTrx = jsondb.getTypeForMonth(currType, currMonth);
-			if (currentMonthTrx.length === 0) {
-				// no trx this month, skip
-				if (jsondb.isThisMonthTrx(currMonth) > 0) tableRowGroup++;
-			} else {
-				currentMonthTrx.forEach(function(curr) {
-					let row = document.createElement("tr");
-					$(row).append(
-						$(document.createElement("td")).text(jsondb.getDateString(curr)),
-						$(document.createElement("td")).text(curr.name),
-						$(document.createElement("td")).addClass("text-code")
-							.text(Number(curr.amount).toFixed(2)),
-					);
-					$(row).dblclick(function(e) {
-						//console.log("Double clicked trx " + curr.id);
-						$("input#sheet-new-" + currType + "-date")
-							.val($(this).children().first().text());
-						$("input#sheet-new-" + currType + "-detail").val(curr.name);
-						$("input#sheet-new-" + currType + "-amount").val(curr.amount);
-						jsondb.deleteTrx(curr.id);
-						//populateSheetTables(currType);
-						populateSheetTables();
-					});
-					$("table#sheet-" + currType + "-table-" + tableRowGroup).append(row);
-				});
-				tableRowGroup++;
-			}
-		});
-		
-		while (tableRowGroup <= 11) {
-			$("table#sheet-" + currType + "-table-" + tableRowGroup).empty();
-			tableRowGroup++;
-		}
-		
-		$("#sheet-" + currType + "-total").text(
-			sumjq("table[id^='sheet-" + currType + "-table-'] td:last-child").toFixed(2)
-		);
-	});
-	
-	$("#sheet-gross-worth").text(
-		jsondb.currency + " " + (Number($("#sheet-income-total").text()) - 
-				Number($("#sheet-expense-total").text())).toFixed(2)
-	);
-	
-	$("#sheet-net-worth").text(
-		jsondb.currency + " " + (
-				Number($("#sheet-gross-worth").text().replaceAll(jsondb.currency, "")) + 
-				Number($("#sheet-obligation-total").text())).toFixed(2)
-	);
+    let refreshTable;
+    if (typeof types == 'undefined') {
+        refreshTable = ["income", "expense", "obligation"];
+    } else if (typeof types === 'string') {
+        refreshTable = [types];
+    } else {
+        refreshTable = types;
+    }
+    refreshTable.forEach(function(currType) {
+        var tableRowGroup = 0;
+        [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0].forEach(function(currMonth) {
+            $("table#sheet-" + currType + "-table-" + tableRowGroup).empty();
+            let currentMonthTrx = jsondb.getTypeForMonth(currType, currMonth);
+            if (currentMonthTrx.length === 0) {
+                // no trx this month, skip
+                if (jsondb.isThisMonthTrx(currMonth) > 0) tableRowGroup++;
+            } else {
+                currentMonthTrx.forEach(function(curr) {
+                    let row = document.createElement("tr");
+                    $(row).append(
+                        $(document.createElement("td")).text(jsondb.getDateString(curr)),
+                        $(document.createElement("td")).text(curr.name),
+                        $(document.createElement("td")).addClass("text-code")
+                            .text(Number(curr.amount).toFixed(2)),
+                    );
+                    $(row).dblclick(function(e) {
+                        //console.log("Double clicked trx " + curr.id);
+                        $("input#sheet-new-" + currType + "-date")
+                            .val($(this).children().first().text());
+                        $("input#sheet-new-" + currType + "-detail").val(curr.name);
+                        $("input#sheet-new-" + currType + "-amount").val(curr.amount);
+                        jsondb.deleteTrx(curr.id);
+                        //populateSheetTables(currType);
+                        populateSheetTables();
+                    });
+                    $("table#sheet-" + currType + "-table-" + tableRowGroup).append(row);
+                });
+                tableRowGroup++;
+            }
+        });
+        
+        while (tableRowGroup <= 11) {
+            $("table#sheet-" + currType + "-table-" + tableRowGroup).empty();
+            tableRowGroup++;
+        }
+        
+        $("#sheet-" + currType + "-total").text(
+            sumjq("table[id^='sheet-" + currType + "-table-'] td:last-child").toFixed(2)
+        );
+    });
+    
+    $("#sheet-gross-worth").text(
+        jsondb.currency + " " + (Number($("#sheet-income-total").text()) - 
+                Number($("#sheet-expense-total").text())).toFixed(2)
+    );
+    
+    $("#sheet-net-worth").text(
+        jsondb.currency + " " + (
+                Number($("#sheet-gross-worth").text().replaceAll(jsondb.currency, "")) + 
+                Number($("#sheet-obligation-total").text())).toFixed(2)
+    );
 }
 
 function swapColorTheme(colorTheme) {
-	if (colorTheme === "none") {
-		$("#w3-theme-color").attr("href", "");
-	} else {
-		$("#w3-theme-color").attr("href", 
-			"https://www.w3schools.com/lib/w3-theme-" + colorTheme + ".css");
-	}
+    if (colorTheme === "none") {
+        $("#w3-theme-color").attr("href", "");
+    } else {
+        $("#w3-theme-color").attr("href", 
+            "https://www.w3schools.com/lib/w3-theme-" + colorTheme + ".css");
+    }
 }
 
 function sumjq(selector) {
-	var sum = 0;
-	$(selector).each(function() {
-		sum += Number($(this).text());
-	});
-	return sum;
-}
-
-function sectionChange(s) {
-	$("main > div").hide();
-	$("div#section-" + s).show();
+    var sum = 0;
+    $(selector).each(function() {
+        sum += Number($(this).text());
+    });
+    return sum;
 }
 
 // Function to download data to a file
 // https://stackoverflow.com/questions/13405129/javascript-create-and-save-file
 // use type : 'application/json'
 function download(data, filename, type) {
-	var file = new Blob([data], {type: type});
-	if (window.navigator.msSaveOrOpenBlob) // IE10+
-		window.navigator.msSaveOrOpenBlob(file, filename);
-	else { // Others
-		let a = document.createElement("a");
-		let url = URL.createObjectURL(file);
-		a.href = url;
-		a.download = filename;
-		document.body.appendChild(a);
-		a.click();
-		setTimeout(function() {
-			document.body.removeChild(a);
-			window.URL.revokeObjectURL(url);  
-		}, 0); 
-	}
+    var file = new Blob([data], {type: type});
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    else { // Others
+        let a = document.createElement("a");
+        let url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);  
+        }, 0); 
+    }
 }
 </script>
 </head>
@@ -600,318 +633,318 @@ function download(data, filename, type) {
 <header class="w3-theme-l1">
 <h1>Daddy Cussy</h1>
 <nav>
-	<button id="h-sheet" disabled>Spreadsheet</button>
-	<button id="h-new">New</button>
-	<button id="h-load">Load</button>
-	<button id="h-download">Download</button>
-	<button id="h-help">Help</button>
-	<button id="h-about">About</button>
+    <button id="h-sheet"  onclick="location.hash = this.id" disabled="disabled">Spreadsheet</button>
+    <button id="h-new" onclick="location.hash = this.id">New</button>
+    <button id="h-load" onclick="location.hash = this.id">Load</button>
+    <button id="h-download" onclick="location.hash = this.id">Download</button>
+    <button id="h-help" onclick="location.hash = this.id">Help</button>
+    <button id="h-about" onclick="location.hash = this.id">About</button>
 </nav>
 <div class="spacer1"></div>
 <div>site design and logo<br>&copy; Athran Zuhail <span id="copy-current-year">2022</span></div>
 </header>
 <main class="w3-theme-l5">
 <div id="section-sheet">
-	<div class="grid-container">
-		<div id="sheet-title-box">
-			<h1 id="sheet-title">You 2022</h1>
-			<button class="dropdown-button" id="sheet-options">&#9660;</button>
-		</div>
-		<div class="sheet-gross-label">
-			<h4>gross worth</h4>
-			<span class="text-code" id="sheet-gross-worth">0.00</span>
-		</div>
-		<div class="sheet-net-label">
-			<h4>net worth</h4>
-			<span class="text-code" id="sheet-net-worth">0.00</span>
-		</div>
-		<table class="sheet-table" id="sheet-income-table">
-			<tr class="topline"><td colspan="3" class="sheet-table-title">INCOME</td></tr>
-			<tr class="bottomline"><td>Date</td><td>Detail</td><td>Amount</td></tr>
-			<tr><td><button class="round-button-small" id="sheet-add-income">&nbsp;&plus;&nbsp;</button></td>
-				<td>TOTAL</td><td class="text-code" id="sheet-income-total">0.00</td></tr>
-			<tr><td><input type="text" id="sheet-new-income-date" size="1"></td>
-				<td><input type="text" id="sheet-new-income-detail"></td>
-				<td><input type="text" id="sheet-new-income-amount" size="1"></td></tr>
-		</table>
-		<table class="sheet-table" id="sheet-expense-table">
-			<tr class="topline"><td colspan="3" class="sheet-table-title">EXPENSE</td></tr>
-			<tr class="bottomline"><td>Date</td><td>Detail</td><td>Amount</td></tr>
-			<tr><td><button class="round-button-small" id="sheet-add-expense">&nbsp;&plus;&nbsp;</button></td>
-				<td>TOTAL</td><td class="text-code" id="sheet-expense-total">0.00</td></tr>
-			<tr><td><input type="text" id="sheet-new-expense-date" size="1"></td>
-				<td><input type="text" id="sheet-new-expense-detail" ></td>
-				<td><input type="text" id="sheet-new-expense-amount" size="1"></td></tr>
-		</table>
-		<table class="sheet-table" id="sheet-obligation-table">
-			<tr class="topline"><td colspan="3" class="sheet-table-title">OBLIGATION</td></tr>
-			<tr class="bottomline"><td>Date</td><td>Detail</td><td>Amount</td></tr>
-			<tr><td><button class="round-button-small" id="sheet-add-obligation">&nbsp;&plus;&nbsp;</button></td>
-				<td>TOTAL</td><td class="text-code" id="sheet-obligation-total">0.00</td></tr>
-			<tr><td><input type="text" id="sheet-new-obligation-date" size="1"></td>
-				<td><input type="text" id="sheet-new-obligation-detail" ></td>
-				<td><input type="text" id="sheet-new-obligation-amount" size="1"></td></tr>
-		</table>
-		<table class="sheet-table" id="sheet-income-table-0"></table>
-		<table class="sheet-table" id="sheet-expense-table-0"></table>
-		<table class="sheet-table" id="sheet-obligation-table-0"></table>
-		<table class="sheet-table" id="sheet-income-table-1"></table>
-		<table class="sheet-table" id="sheet-expense-table-1"></table>
-		<table class="sheet-table" id="sheet-obligation-table-1"></table>
-		<table class="sheet-table" id="sheet-income-table-2"></table>
-		<table class="sheet-table" id="sheet-expense-table-2"></table>
-		<table class="sheet-table" id="sheet-obligation-table-2"></table>
-		<table class="sheet-table" id="sheet-income-table-3"></table>
-		<table class="sheet-table" id="sheet-expense-table-3"></table>
-		<table class="sheet-table" id="sheet-obligation-table-3"></table>
-		<table class="sheet-table" id="sheet-income-table-4"></table>
-		<table class="sheet-table" id="sheet-expense-table-4"></table>
-		<table class="sheet-table" id="sheet-obligation-table-4"></table>
-		<table class="sheet-table" id="sheet-income-table-5"></table>
-		<table class="sheet-table" id="sheet-expense-table-5"></table>
-		<table class="sheet-table" id="sheet-obligation-table-5"></table>
-		<table class="sheet-table" id="sheet-income-table-6"></table>
-		<table class="sheet-table" id="sheet-expense-table-6"></table>
-		<table class="sheet-table" id="sheet-obligation-table-6"></table>
-		<table class="sheet-table" id="sheet-income-table-7"></table>
-		<table class="sheet-table" id="sheet-expense-table-7"></table>
-		<table class="sheet-table" id="sheet-obligation-table-7"></table>
-		<table class="sheet-table" id="sheet-income-table-8"></table>
-		<table class="sheet-table" id="sheet-expense-table-8"></table>
-		<table class="sheet-table" id="sheet-obligation-table-8"></table>
-		<table class="sheet-table" id="sheet-income-table-9"></table>
-		<table class="sheet-table" id="sheet-expense-table-9"></table>
-		<table class="sheet-table" id="sheet-obligation-table-9"></table>
-		<table class="sheet-table" id="sheet-income-table-10"></table>
-		<table class="sheet-table" id="sheet-expense-table-10"></table>
-		<table class="sheet-table" id="sheet-obligation-table-10"></table>
-		<table class="sheet-table" id="sheet-income-table-11"></table>
-		<table class="sheet-table" id="sheet-expense-table-11"></table>
-		<table class="sheet-table" id="sheet-obligation-table-11"></table>
-	</div>
-	<div>&nbsp;<!-- spacer --></div>
+    <div class="grid-container">
+        <div id="sheet-title-box">
+            <h1 id="sheet-title">You 2022</h1>
+            <button class="dropdown-button" id="sheet-options">&#9660;</button>
+        </div>
+        <div class="sheet-gross-label">
+            <h4>gross worth</h4>
+            <span class="text-code" id="sheet-gross-worth">0.00</span>
+        </div>
+        <div class="sheet-net-label">
+            <h4>net worth</h4>
+            <span class="text-code" id="sheet-net-worth">0.00</span>
+        </div>
+        <table class="sheet-table" id="sheet-income-table">
+            <tr class="topline"><td colspan="3" class="sheet-table-title">INCOME</td></tr>
+            <tr class="bottomline"><td>Date</td><td>Detail</td><td>Amount</td></tr>
+            <tr><td><button class="round-button-small" id="sheet-add-income">&nbsp;&plus;&nbsp;</button></td>
+                <td>TOTAL</td><td class="text-code" id="sheet-income-total">0.00</td></tr>
+            <tr><td><input type="text" id="sheet-new-income-date" size="1"></td>
+                <td><input type="text" id="sheet-new-income-detail"></td>
+                <td><input type="text" id="sheet-new-income-amount" size="1"></td></tr>
+        </table>
+        <table class="sheet-table" id="sheet-expense-table">
+            <tr class="topline"><td colspan="3" class="sheet-table-title">EXPENSE</td></tr>
+            <tr class="bottomline"><td>Date</td><td>Detail</td><td>Amount</td></tr>
+            <tr><td><button class="round-button-small" id="sheet-add-expense">&nbsp;&plus;&nbsp;</button></td>
+                <td>TOTAL</td><td class="text-code" id="sheet-expense-total">0.00</td></tr>
+            <tr><td><input type="text" id="sheet-new-expense-date" size="1"></td>
+                <td><input type="text" id="sheet-new-expense-detail" ></td>
+                <td><input type="text" id="sheet-new-expense-amount" size="1"></td></tr>
+        </table>
+        <table class="sheet-table" id="sheet-obligation-table">
+            <tr class="topline"><td colspan="3" class="sheet-table-title">OBLIGATION</td></tr>
+            <tr class="bottomline"><td>Date</td><td>Detail</td><td>Amount</td></tr>
+            <tr><td><button class="round-button-small" id="sheet-add-obligation">&nbsp;&plus;&nbsp;</button></td>
+                <td>TOTAL</td><td class="text-code" id="sheet-obligation-total">0.00</td></tr>
+            <tr><td><input type="text" id="sheet-new-obligation-date" size="1"></td>
+                <td><input type="text" id="sheet-new-obligation-detail" ></td>
+                <td><input type="text" id="sheet-new-obligation-amount" size="1"></td></tr>
+        </table>
+        <table class="sheet-table" id="sheet-income-table-0"></table>
+        <table class="sheet-table" id="sheet-expense-table-0"></table>
+        <table class="sheet-table" id="sheet-obligation-table-0"></table>
+        <table class="sheet-table" id="sheet-income-table-1"></table>
+        <table class="sheet-table" id="sheet-expense-table-1"></table>
+        <table class="sheet-table" id="sheet-obligation-table-1"></table>
+        <table class="sheet-table" id="sheet-income-table-2"></table>
+        <table class="sheet-table" id="sheet-expense-table-2"></table>
+        <table class="sheet-table" id="sheet-obligation-table-2"></table>
+        <table class="sheet-table" id="sheet-income-table-3"></table>
+        <table class="sheet-table" id="sheet-expense-table-3"></table>
+        <table class="sheet-table" id="sheet-obligation-table-3"></table>
+        <table class="sheet-table" id="sheet-income-table-4"></table>
+        <table class="sheet-table" id="sheet-expense-table-4"></table>
+        <table class="sheet-table" id="sheet-obligation-table-4"></table>
+        <table class="sheet-table" id="sheet-income-table-5"></table>
+        <table class="sheet-table" id="sheet-expense-table-5"></table>
+        <table class="sheet-table" id="sheet-obligation-table-5"></table>
+        <table class="sheet-table" id="sheet-income-table-6"></table>
+        <table class="sheet-table" id="sheet-expense-table-6"></table>
+        <table class="sheet-table" id="sheet-obligation-table-6"></table>
+        <table class="sheet-table" id="sheet-income-table-7"></table>
+        <table class="sheet-table" id="sheet-expense-table-7"></table>
+        <table class="sheet-table" id="sheet-obligation-table-7"></table>
+        <table class="sheet-table" id="sheet-income-table-8"></table>
+        <table class="sheet-table" id="sheet-expense-table-8"></table>
+        <table class="sheet-table" id="sheet-obligation-table-8"></table>
+        <table class="sheet-table" id="sheet-income-table-9"></table>
+        <table class="sheet-table" id="sheet-expense-table-9"></table>
+        <table class="sheet-table" id="sheet-obligation-table-9"></table>
+        <table class="sheet-table" id="sheet-income-table-10"></table>
+        <table class="sheet-table" id="sheet-expense-table-10"></table>
+        <table class="sheet-table" id="sheet-obligation-table-10"></table>
+        <table class="sheet-table" id="sheet-income-table-11"></table>
+        <table class="sheet-table" id="sheet-expense-table-11"></table>
+        <table class="sheet-table" id="sheet-obligation-table-11"></table>
+    </div>
+    <div>&nbsp;<!-- spacer --></div>
 </div>
 <div id="section-new">
-	<h1>Create new spreadsheet</h1>
-	<p>Make sure you have saved/downloaded any active spreadsheet,
-	because creating a new one will overwrite the current one.</p>
-	<table>
-		<tr><td>Name</td><td>:</td>
-			<td><input type="text" id="new-name" value="You"></td>
-			<td class="tooltip">&#x1F6C8;
-				<span class="tooltiptext w3-theme-l1">
-					Who or what this account is about. It could be a person,
-					a legal entity (a married couple, a trust), 
-					an organization (school club, neighbourhood watch), 
-					an activity (wedding, party), 
-					or a business.
-				</span></td></tr>
-		<tr><td>Year</td><td>:</td>
-			<td><input type="text" id="new-year"></td>
-			<td class="tooltip">&#x1F6C8;
-				<span class="tooltiptext w3-theme-l1">
-					This spreadsheet will only be valid for one year, 
-					from 1 January to 31 December. Start a new spreadsheet at
-					the start of a new calendar year.
-				</span></td></tr>
-		<tr><td>Your date format</td><td>:</td>
-			<td><input type="text" id="new-date-fmt" readonly></td>
-			<td class="tooltip">&#x1F6C8;
-				<span class="tooltiptext w3-theme-l1">
-					There are many variations on how a date is written around 
-					the world. Displayed here is how your browser is configured
-					to display and interpret today's date. Note the month and day
-					order, and the separator used. Please use this exact 
-					same format when recording your account transactions.
-				</span></td></tr>
-		<tr class="firstline"><td></td><td></td><td></td></tr>
-		<tr><td>Starting Balance</td><td>:</td>
-			<td><input type="text" id="new-balance" placeholder="optional"></td>
-			<td class="tooltip">&#x1F6C8;
-				<span class="tooltiptext w3-theme-l1">
-					The total of your checking account balance(s), 
-					also known as your gross worth.
-				</span></td></tr>
-		<tr><td>Starting Obligation</td><td>:</td><td>
-			<input type="text" id="new-debt" placeholder="optional"></td></tr>
-		<tr><td>Starting month</td><td>:</td><td>
-			<input type="text" id="new-month" placeholder="optional: 1, 2, 3, ..."></td></tr>
-		<tr><td>Currency label</td><td>:</td><td>
-			<input type="text" id="new-currency" placeholder="optional"></td></tr>
-		<tr><td>Colour theme</td><td>:</td><td>
-			<select id="new-color-theme">
-				<option value="red">Red</option>
-				<option value="pink">Pink</option>
-				<option value="purple">Purple</option>
-				<option value="deep-purple" selected="selected">Deep Purple</option>
-				<option value="indigo">Indigo</option>
-				<option value="blue">Blue</option>
-				<option value="light-blue">Light Blue</option>
-				<option value="cyan">Cyan</option>
-				<option value="teal">Teal</option>
-				<option value="green">Green</option>
-				<option value="light-green">Light Green</option>
-				<option value="lime">Lime</option>
-				<option value="khaki">Khaki</option>
-				<option value="yellow">Yellow</option>
-				<option value="amber">Amber</option>
-				<option value="orange">Orange</option>
-				<option value="deep-orange">Deep Orange</option>
-				<option value="blue-grey">Blue Grey</option>
-				<option value="brown">Brown</option>
-				<option value="grey">Grey</option>
-				<option value="dark-grey">Dark Grey</option>
-				<option value="black">Black</option>
-				<option value="none">None</option>
-			</select></td></tr>
-		<tr><td></td><td></td><td><button id="new-create">CREATE</button></td></tr>
-	</table>
+    <h1>Create new spreadsheet</h1>
+    <p>Make sure you have saved/downloaded any active spreadsheet,
+    because creating a new one will overwrite the current one.</p>
+    <table>
+        <tr><td>Name</td><td>:</td>
+            <td><input type="text" id="new-name" value="You"></td>
+            <td class="tooltip">&#x1F6C8;
+                <span class="tooltiptext w3-theme-l1">
+                    Who or what this account is about. It could be a person,
+                    a legal entity (a married couple, a trust), 
+                    an organization (school club, neighbourhood watch), 
+                    an activity (wedding, party), 
+                    or a business.
+                </span></td></tr>
+        <tr><td>Year</td><td>:</td>
+            <td><input type="text" id="new-year"></td>
+            <td class="tooltip">&#x1F6C8;
+                <span class="tooltiptext w3-theme-l1">
+                    This spreadsheet will only be valid for one year, 
+                    from 1 January to 31 December. Start a new spreadsheet at
+                    the start of a new calendar year.
+                </span></td></tr>
+        <tr><td>Your date format</td><td>:</td>
+            <td><input type="text" id="new-date-fmt" readonly></td>
+            <td class="tooltip">&#x1F6C8;
+                <span class="tooltiptext w3-theme-l1">
+                    There are many variations on how a date is written around 
+                    the world. Displayed here is how your browser is configured
+                    to display and interpret today's date. Note the month and day
+                    order, and the separator used. Please use this exact 
+                    same format when recording your account transactions.
+                </span></td></tr>
+        <tr class="firstline"><td></td><td></td><td></td></tr>
+        <tr><td>Starting Balance</td><td>:</td>
+            <td><input type="text" id="new-balance" placeholder="optional"></td>
+            <td class="tooltip">&#x1F6C8;
+                <span class="tooltiptext w3-theme-l1">
+                    The total of your checking account balance(s), 
+                    also known as your gross worth.
+                </span></td></tr>
+        <tr><td>Starting Obligation</td><td>:</td><td>
+            <input type="text" id="new-debt" placeholder="optional"></td></tr>
+        <tr><td>Starting month</td><td>:</td><td>
+            <input type="text" id="new-month" placeholder="optional: 1, 2, 3, ..."></td></tr>
+        <tr><td>Currency label</td><td>:</td><td>
+            <input type="text" id="new-currency" placeholder="optional"></td></tr>
+        <tr><td>Colour theme</td><td>:</td><td>
+            <select id="new-color-theme">
+                <option value="red">Red</option>
+                <option value="pink">Pink</option>
+                <option value="purple">Purple</option>
+                <option value="deep-purple" selected="selected">Deep Purple</option>
+                <option value="indigo">Indigo</option>
+                <option value="blue">Blue</option>
+                <option value="light-blue">Light Blue</option>
+                <option value="cyan">Cyan</option>
+                <option value="teal">Teal</option>
+                <option value="green">Green</option>
+                <option value="light-green">Light Green</option>
+                <option value="lime">Lime</option>
+                <option value="khaki">Khaki</option>
+                <option value="yellow">Yellow</option>
+                <option value="amber">Amber</option>
+                <option value="orange">Orange</option>
+                <option value="deep-orange">Deep Orange</option>
+                <option value="blue-grey">Blue Grey</option>
+                <option value="brown">Brown</option>
+                <option value="grey">Grey</option>
+                <option value="dark-grey">Dark Grey</option>
+                <option value="black">Black</option>
+                <option value="none">None</option>
+            </select></td></tr>
+        <tr><td></td><td></td><td><button id="new-create">CREATE</button></td></tr>
+    </table>
 </div>
 <div id="section-load">
-	<h1>Load a previously saved spreadsheet</h1>
-	<p>It should be a <span class="text-code">.json</span> file:</p>
-	<input type="file" id="load-file" accept=".json">
-	<p id="load-preview"></p>
-	<p>Make sure you have saved/downloaded any active spreadsheet,
-	because loading a new one will overwrite the current one.</p>
-	<button id="load-create">LOAD</button>
+    <h1>Load a previously saved spreadsheet</h1>
+    <p>It should be a <span class="text-code">.json</span> file:</p>
+    <input type="file" id="load-file" accept=".json">
+    <p id="load-preview"></p>
+    <p>Make sure you have saved/downloaded any active spreadsheet,
+    because loading a new one will overwrite the current one.</p>
+    <button id="load-create">LOAD</button>
 </div>
 <div id="section-download">
-	<h1>Download the spreadsheet</h1>
-	<p>The app will download the data you had entered into a file. This file is
-	not excrypted or obfuscated in any way, it's just structured into JSON.
-	It is not copyright protected. It is your data, and you are free to inspect,
-	copy, distribute, or modify it whichever way you want.</p>
-	<p>However, manual modification may cause that file to be in an invalid
-	format, and thus unrecognizable and unusable by this app.</p>
-	<p>Keep this file in a dusty corner of your computer. The next time
-	you want to use this app again, find that file and <a href="#h-load">Load</a> 
-	it back into the app.</p>
-	<button id="download-download">DOWNLOAD</button>
+    <h1>Download the spreadsheet</h1>
+    <p>The app will download the data you had entered into a file. This file is
+    not excrypted or obfuscated in any way, it's just structured into JSON.
+    It is not copyright protected. It is your data, and you are free to inspect,
+    copy, distribute, or modify it whichever way you want.</p>
+    <p>However, manual modification may cause that file to be in an invalid
+    format, and thus unrecognizable and unusable by this app.</p>
+    <p>Keep this file in a dusty corner of your computer. The next time
+    you want to use this app again, find that file and <a href="#h-load">Load</a> 
+    it back into the app.</p>
+    <button id="download-download">DOWNLOAD</button>
 </div>
 <div id="section-help">
-	<h1>Help for you</h1>
-	<h4>Q: How do I edit or delete an entry?</h4>
-	<p>A: DOUBLE-CLICK the row that you want to edit or delete. That row will be deleted 
-	and its details will be copied to the input row above it. You can edit that input row 
-	and press ENTER (or CLICK the &plus; button) to resubmit the edit, or ignore it for 
-	a full delete.</p>
-	<h4>Q: What is Income?</h4>
-	<p>A: Any money that you receive. Salary, bonus, stipend, compensation, investment 
-	dividend, someone paying back a personal loan, bank account balance carryover at the 
-	start of the financial year, ...</p>
-	<h4>Q: What is Expense?</h4>
-	<p>A: Any money that you spend. Buying something, paying fees and penalties, 
-	paying taxes, paying loan installments, ...</p>
-	<h4>Q: What is Gross Worth?</h4>
-	<p>A: Gross Worth &equals; Total Income &minus; Total Expense</p>
-	<h4>Q: What is Net Worth?</h4>
-	<p>A: Net Worth &equals; Gross Worth &plus; Total Obligation</p>
-	<h4>Q: What is Obligation?</h4>
-	<p>A: Deferred expense and income. A positive obligation is when someone/something
-	promises to pay you a specific amount at a later date (deferred income). A negative 
-	obligation is when you promise to pay someone/something a specific amount at a 
-	later date (deferred expense).</p>
-	<p> Recording deferred expense/income helps you better understand your financial
-	position at a particular moment. Your goal in this game is to try keep both 
-	your gross worth and net worth above zero. Between net worth and gross worth,
-	the lower amount represents your discretionary fund that you can spend on 
-	entertainment or luxury. Stop any luxury spending before you dip into 
-	negative worth.</p>
-	<p><strong>Example 1:</strong> You have a big yearly payment commitment (motor 
-	insurance, college tuition, property tax, club membership) of $6000. 
-	An easy way to spread out this commitment/obligation is to record the amount 
-	divided by 12 as a negative obligation on every month. This is an example of
-	deferred expense. Even though you haven't made the payment yet, you pretend
-	that you have made fractions of the payment by recording it as a negative 
-	obligation.</p>
-	<span class="text-code">OBLIGATION | 1-Feb | tuition | -$500</span><br>
-	<span class="text-code">OBLIGATION | 1-Mar | tuition | -$500</span><br>
-	<span class="text-code">OBLIGATION | 1-Apr | tuition | -$500</span>
-	<p>This will automatically deduct that amount from your net worth, which signals
-	that you don't have as much discretionary fund as your bank account statement might
-	tell you. At the end of the year, when it's time to pay that commitment, record it
-	as an expense, and also record the same amount as a positive obligation.</p>
-	<span class="text-code">EXPENSE    | 31-Dec | tuition | $6000</span><br>
-	<span class="text-code">OBLIGATION | 31-Dec | tuition | $6000</span>
-	<p><strong>Example 2: </strong> You lend $300 to a friend, who promises to
-	pay it back in three months. Record it as an expense, and also as a positive obligation
-	by the same amount. This signals that while there is less money in your 
-	bank account, you have more worth available that is locked up. This is an 
-	example of deferred income. Even though you haven't received the money yet,
-	you pretend as if you have received the money by recording it as a positive
-	obligation.</p>
-	<span class="text-code">EXPENSE    | 24-Feb | loan to John | $300</span><br>
-	<span class="text-code">OBLIGATION | 24-Feb | loan to John | $300</span>
-	<p>When the friend pays the loan back, record it as an income, and also a negative
-	obligation by the same amount.</p>
-	<span class="text-code">INCOME     | 24-May | loan to John |  $300</span><br>
-	<span class="text-code">OBLIGATION | 24-May | loan to John | -$300</span>
-	<h4>Q: How do I record investments and savings?</h4>
-	<p>A: You could record your deposits into an investment account as an expense,
-	paired with a positive obligation. This signals that while your checking account 
-	balance may be low, you have a significant amount of worth tied up elsewhere. 
-	The dividend is recorded as income if you withdraw it, or as a positive obligation 
-	if you immediately reinvest it.</p>
-	<span class="text-code">EXPENSE    | 26-Feb | invest   | $300</span><br>
-	<span class="text-code">OBLIGATION | 26-Feb | invest   | $300</span><br>
-	<span class="text-code">EXPENSE    | 26-Mar | invest   | $300</span><br>
-	<span class="text-code">OBLIGATION | 26-Mar | invest   | $300</span><br>
-	<span class="text-code">EXPENSE    | 26-Apr | invest   | $300</span><br>
-	<span class="text-code">OBLIGATION | 26-Apr | invest   | $300</span><br>
-	<span class="text-code">INCOME     | 01-May | dividend | $550</span>
-	<p>When you withdraw from an investment account, record it as an income,
-	paired with an equal amount of negative obligation.</p>
-	<span class="text-code">INCOME     | 17-Oct | investment   |  $70,000</span><br>
-	<span class="text-code">OBLIGATION | 17-Oct | investment   | -$70,000</span>
-	<p>But some people have a phobia of excess fund. You could also record investment
-	deposits simply as expense, treating the amount in your investment account as
-	a mystery so that you can't be tempted to spend it. Withdrawing from the 
-	investment account then is just an income.</p>
-	<span class="text-code">EXPENSE    | 26-Feb | invest    | $300</span><br>
-	<span class="text-code">EXPENSE    | 26-Mar | invest    | $300</span><br>
-	<span class="text-code">EXPENSE    | 26-Apr | invest    | $300</span><br>
-	<span class="text-code">INCOME     | 26-May | invest W/ | $1000</span>
-	<h4>Q: How do I record cash withdrawal?</h4>
-	<p>** This is written assuming that you are a millenial adult living in a 
-	fairly developed country who doesn't really use cash for significant expenses all 
-	that much anymore.</p>
-	<p>A: Technically, cash withdrawal is not any kind of transaction. Only when you
-	buy something with that cash would it become an expense. However, since cash 
-	is often used for small purchases that are tedious to record, it's easier 
-	to just record the cash withdrawal as an expense to lump together all of your 
-	small cash expenses.</p>
-	<span class="text-code">EXPENSE | 13-Mar | cash withdraw | $300</span>
-	<p>In the rare case where you had to make a big expense with cash, you may
-	record it as such. Let's say you withdraw $500 to buy an item for $467 cash.</p>
-	<span class="text-code">EXPENSE | 26-Mar | antique clock | $467</span><br>
-	<span class="text-code">EXPENSE | 26-Mar | cash withdraw |  $33</span>
-	<h4>Q: Why doesn't the app save data to the server</h4>
-	<p>A: That would be convenient for sure, but is a privacy risk. You should store
-	your financial records locally.</p>
-	<h4>Q: How do I transition to the next financial year</h4>
-	<p>A: On the New page, type your current Gross Worth into the Starting Balance field,
-	and your current total Obligation into the Starting Obligation field</p>
-	
-	<div>&nbsp;<!-- spacer --></div>
+    <h1>Help for you</h1>
+    <h4>Q: How do I edit or delete an entry?</h4>
+    <p>A: DOUBLE-CLICK the row that you want to edit or delete. That row will be deleted 
+    and its details will be copied to the input row above it. You can edit that input row 
+    and press ENTER (or CLICK the &plus; button) to resubmit the edit, or ignore it for 
+    a full delete.</p>
+    <h4>Q: What is Income?</h4>
+    <p>A: Any money that you receive. Salary, bonus, stipend, compensation, investment 
+    dividend, someone paying back a personal loan, bank account balance carryover at the 
+    start of the financial year, ...</p>
+    <h4>Q: What is Expense?</h4>
+    <p>A: Any money that you spend. Buying something, paying fees and penalties, 
+    paying taxes, paying loan installments, ...</p>
+    <h4>Q: What is Gross Worth?</h4>
+    <p>A: Gross Worth &equals; Total Income &minus; Total Expense</p>
+    <h4>Q: What is Net Worth?</h4>
+    <p>A: Net Worth &equals; Gross Worth &plus; Total Obligation</p>
+    <h4>Q: What is Obligation?</h4>
+    <p>A: Deferred expense and income. A positive obligation is when someone/something
+    promises to pay you a specific amount at a later date (deferred income). A negative 
+    obligation is when you promise to pay someone/something a specific amount at a 
+    later date (deferred expense).</p>
+    <p> Recording deferred expense/income helps you better understand your financial
+    position at a particular moment. Your goal in this game is to try keep both 
+    your gross worth and net worth above zero. Between net worth and gross worth,
+    the lower amount represents your discretionary fund that you can spend on 
+    entertainment or luxury. Stop any luxury spending before you dip into 
+    negative worth.</p>
+    <p><strong>Example 1:</strong> You have a big yearly payment commitment (motor 
+    insurance, college tuition, property tax, club membership) of $6000. 
+    An easy way to spread out this commitment/obligation is to record the amount 
+    divided by 12 as a negative obligation on every month. This is an example of
+    deferred expense. Even though you haven't made the payment yet, you pretend
+    that you have made fractions of the payment by recording it as a negative 
+    obligation.</p>
+    <span class="text-code">OBLIGATION | 1-Feb | tuition | -$500</span><br>
+    <span class="text-code">OBLIGATION | 1-Mar | tuition | -$500</span><br>
+    <span class="text-code">OBLIGATION | 1-Apr | tuition | -$500</span>
+    <p>This will automatically deduct that amount from your net worth, which signals
+    that you don't have as much discretionary fund as your bank account statement might
+    tell you. At the end of the year, when it's time to pay that commitment, record it
+    as an expense, and also record the same amount as a positive obligation.</p>
+    <span class="text-code">EXPENSE    | 31-Dec | tuition | $6000</span><br>
+    <span class="text-code">OBLIGATION | 31-Dec | tuition | $6000</span>
+    <p><strong>Example 2: </strong> You lend $300 to a friend, who promises to
+    pay it back in three months. Record it as an expense, and also as a positive obligation
+    by the same amount. This signals that while there is less money in your 
+    bank account, you have more worth available that is locked up. This is an 
+    example of deferred income. Even though you haven't received the money yet,
+    you pretend as if you have received the money by recording it as a positive
+    obligation.</p>
+    <span class="text-code">EXPENSE    | 24-Feb | loan to John | $300</span><br>
+    <span class="text-code">OBLIGATION | 24-Feb | loan to John | $300</span>
+    <p>When the friend pays the loan back, record it as an income, and also a negative
+    obligation by the same amount.</p>
+    <span class="text-code">INCOME     | 24-May | loan to John |  $300</span><br>
+    <span class="text-code">OBLIGATION | 24-May | loan to John | -$300</span>
+    <h4>Q: How do I record investments and savings?</h4>
+    <p>A: You could record your deposits into an investment account as an expense,
+    paired with a positive obligation. This signals that while your checking account 
+    balance may be low, you have a significant amount of worth tied up elsewhere. 
+    The dividend is recorded as income if you withdraw it, or as a positive obligation 
+    if you immediately reinvest it.</p>
+    <span class="text-code">EXPENSE    | 26-Feb | invest   | $300</span><br>
+    <span class="text-code">OBLIGATION | 26-Feb | invest   | $300</span><br>
+    <span class="text-code">EXPENSE    | 26-Mar | invest   | $300</span><br>
+    <span class="text-code">OBLIGATION | 26-Mar | invest   | $300</span><br>
+    <span class="text-code">EXPENSE    | 26-Apr | invest   | $300</span><br>
+    <span class="text-code">OBLIGATION | 26-Apr | invest   | $300</span><br>
+    <span class="text-code">INCOME     | 01-May | dividend | $550</span>
+    <p>When you withdraw from an investment account, record it as an income,
+    paired with an equal amount of negative obligation.</p>
+    <span class="text-code">INCOME     | 17-Oct | investment   |  $70,000</span><br>
+    <span class="text-code">OBLIGATION | 17-Oct | investment   | -$70,000</span>
+    <p>But some people have a phobia of excess fund. You could also record investment
+    deposits simply as expense, treating the amount in your investment account as
+    a mystery so that you can't be tempted to spend it. Withdrawing from the 
+    investment account then is just an income.</p>
+    <span class="text-code">EXPENSE    | 26-Feb | invest    | $300</span><br>
+    <span class="text-code">EXPENSE    | 26-Mar | invest    | $300</span><br>
+    <span class="text-code">EXPENSE    | 26-Apr | invest    | $300</span><br>
+    <span class="text-code">INCOME     | 26-May | invest W/ | $1000</span>
+    <h4>Q: How do I record cash withdrawal?</h4>
+    <p>** This is written assuming that you are a millenial adult living in a 
+    fairly developed country who doesn't really use cash for significant expenses all 
+    that much anymore.</p>
+    <p>A: Technically, cash withdrawal is not any kind of transaction. Only when you
+    buy something with that cash would it become an expense. However, since cash 
+    is often used for small purchases that are tedious to record, it's easier 
+    to just record the cash withdrawal as an expense to lump together all of your 
+    small cash expenses.</p>
+    <span class="text-code">EXPENSE | 13-Mar | cash withdraw | $300</span>
+    <p>In the rare case where you had to make a big expense with cash, you may
+    record it as such. Let's say you withdraw $500 to buy an item for $467 cash.</p>
+    <span class="text-code">EXPENSE | 26-Mar | antique clock | $467</span><br>
+    <span class="text-code">EXPENSE | 26-Mar | cash withdraw |  $33</span>
+    <h4>Q: Why doesn't the app save data to the server</h4>
+    <p>A: That would be convenient for sure, but is a privacy risk. You should store
+    your financial records locally.</p>
+    <h4>Q: How do I transition to the next financial year</h4>
+    <p>A: On the New page, type your current Gross Worth into the Starting Balance field,
+    and your current total Obligation into the Starting Obligation field</p>
+    
+    <div>&nbsp;<!-- spacer --></div>
 </div>
 <div id="section-about">
-	<h1>About this app</h1>
-	<p>
-		This is an app for tracking and analyzing simple personal income, expense, 
-		and investment. The target audience is an average working adult.
-	</p>
-	<span>To start using this application, </span>
-	<ul>
-		<li>create a <a href="#h-new">New</a> spreadsheet, or </li>
-		<li><a href="#h-load">Load</a> a previously saved spreadsheet. </li>
-	</ul>
-	<p>	
-		Note that this app does not save any data to any server, so it is very 
-		important that you <a href="#h-download">Download</a> your work after 
-		you're done, otherwise all of your progress will be lost.
-	</p>
-	<p>If you need any further <a href="#h-help">Help</a>, feel free to ask any question.</p>
+    <h1>About this app</h1>
+    <p>
+        This is an app for tracking and analyzing simple personal income, expense, 
+        and investment. The target audience is an average working adult.
+    </p>
+    <span>To start using this application, </span>
+    <ul>
+        <li>create a <a href="#h-new">New</a> spreadsheet, or </li>
+        <li><a href="#h-load">Load</a> a previously saved spreadsheet. </li>
+    </ul>
+    <p>    
+        Note that this app does not save any data to any server, so it is very 
+        important that you <a href="#h-download">Download</a> your work after 
+        you're done, otherwise all of your progress will be lost.
+    </p>
+    <p>If you need any further <a href="#h-help">Help</a>, feel free to ask any question.</p>
 </div>
 <!--
 <button class="round-button" style="display:none">&nbsp;&plus;&nbsp;</button>
