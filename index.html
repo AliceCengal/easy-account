@@ -77,7 +77,6 @@ strong {            padding: 0px; }
     font-weight: bold;
     border-radius: 50%;
 }
-.dropdown-button {    padding: 5px;    }
 button#download-download {
     display: block;
     margin: 0 auto;
@@ -88,9 +87,17 @@ div#section-help p { text-align: justify; }
     font-size: large;
     white-space: pre;
 }
+div.canvas-container {
+/* canvas#chart-worth {*/
+    position: relative;
+    display: none;
+    width: 90%;
+    height: 300px;
+    margin: 0 auto;
+}
 .grid-container {
     width: 100%;
-    margin: 21px 0 0 0;
+    margin: 0px;
     padding: 0px;
     display: grid;
     grid-template-columns: auto auto auto 10px;
@@ -98,13 +105,14 @@ div#section-help p { text-align: justify; }
             auto auto auto auto auto auto auto auto auto;
     grid-gap: 10px;
 }
-#sheet-title {    display: inline; margin: 0px; padding: 0px;    }
 #sheet-title-box {    
     grid-area: 1 / 1 / span 1 / span 1; 
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end; }
+    justify-content: flex-start;
+    align-items: flex-end; 
+}
+#sheet-title-box * { margin: 5px; }
 .sheet-gross-label {
     grid-area: 1 / 2 / span 1 / span 1;
     display: flex;
@@ -194,6 +202,7 @@ div#section-help p { text-align: justify; }
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
 const today = new Date();
 var jsondb = {
@@ -210,6 +219,8 @@ var jsondb = {
     transactions: [
     ]
 };
+
+var chartRef = {};
 
 function AccountDatabase(name, year) {
     this.name = name;
@@ -284,19 +295,17 @@ function AccountDatabase(name, year) {
     };
     
     this.calculateWorthByDay = function() {
-        let nwbd = Array(365).fill(0);
-        let gwbd = Array(365).fill(0);
+        let wbd = Array(365).fill([ 0 , 0 ]);
         let dateIter = new Date();
         dateIter.setFullYear(this.year, 0, 1);
         let trxIter = Array.from(this.transactions).reverse();
         //console.log(trxIter.length);
-        gwbd.forEach(function(curr, ix, arr) {
+        wbd.forEach(function(curr, ix, arr) {
             //console.log(ix + " : " + dateIter.toLocaleDateString());
-            if (trxIter.length === 0) return;
             
             let grossworth = 0;
             let networth = 0;
-            while (true) {
+            while (trxIter.length > 0) {
                 //console.log(trxIter[0]);
                 let d = new Date( trxIter[0].date * 1000  );
                 
@@ -307,8 +316,10 @@ function AccountDatabase(name, year) {
                     if (trx.type === "expense") {
                         grossworth -= Number(trx.amount);
                         networth -= Number(trx.amount);
-                    } else {
+                    } else if (trx.type === "income") {
                         grossworth += Number(trx.amount);
+                        networth += Number(trx.amount);
+                    } else if (trx.type === "obligation") {
                         networth += Number(trx.amount);
                     }
                     
@@ -317,13 +328,16 @@ function AccountDatabase(name, year) {
                 
             }
             
-            arr[ix] = grossworth;
-            nwbd[ix] = networth;
-            if (ix !== 0) { arr[ix] += arr[ix - 1]; }
+            arr[ix] = [ grossworth, networth, dateIter.getMonth() ];
+            
+            if (ix !== 0) { 
+                arr[ix][0] += arr[ix - 1][0];
+                arr[ix][1] += arr[ix - 1][1];
+            }
             dateIter.setDate(dateIter.getDate() + 1);
         });
         
-        return { gwbd, nwbd };
+        return wbd;
     };
 }
 
@@ -351,7 +365,7 @@ $(document).ready(function() {
     $("main h1").addClass("w3-text-theme");
     
     // handle the URI hash mark
-    if (location.hash !== '') sectionChange(location.hash.substring(3));
+    if (location.hash !== '') hashChangeHandler();
 
     // initialize New form
     $("input#new-name").val("You");
@@ -513,18 +527,78 @@ $(document).ready(function() {
         });
     });
     
-    $("button#sheet-options").click(function(e) {
-        populateSheetTables();
+    $("button#sheet-options-chart").click(function(e) {
+        let chart = $("div.canvas-container");
+        if (chart.css("display") === 'none') {
+            let worths = jsondb.calculateWorthByDay();
+            let grossworths = worths.map((a) => a[0]);
+            let networths = worths.map((a) => a[1]);
+            let nodeColors1 = worths.map(
+                (a) => (a[2] % 2 == 0 ? "blue" : "green"));
+            let nodeColors2 = worths.map(
+                (a) => (a[2] % 2 == 0 ? "red" : "yellow"));
+            let labels = worths.map((a) => Number(a[2] + 1).toString())
+                .reduce((cumm, curr) => {
+                    if (cumm.length === 0 || cumm[0][0] !== curr) {
+                        cumm.unshift([curr]);
+                        return cumm;
+                    } else {
+                        cumm[0].push('');
+                        return cumm;
+                    }
+                }, [])
+                .reverse().flat();
+            let labels2 = worths.map((a) => Number(a[2] + 1).toString());
+            
+            //console.log(labels);
+            let data = {
+                labels: labels2,
+                datasets: [
+                    {
+                        label: "Gross",
+                        data: grossworths,
+                        borderColor: nodeColors1
+                    },
+                    {
+                        label: "Net",
+                        data: networths,
+                        borderColor: nodeColors2
+                    }
+                ]
+            };
+            
+            let config = {
+                type: 'line',
+                data: data,
+                options: {
+                    legend: {display: false},
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    showXLabels: 12
+                }
+            };
+            
+            let ctx = document.getElementById('chart-worth').getContext('2d');
+            chartRef = new Chart(ctx, config);
+            
+            chart.css("display", "block");
+        } else {
+            chartRef.destroy();
+            chartRef = {};
+            chart.css("display", "none");
+        }
     });
 });
 
-$(window).on('hashchange', function(e) {
+$(window).on('hashchange', hashChangeHandler);
+
+function hashChangeHandler(e) {
     // handle the URI hash mark
     if (location.hash !== '') {
         $("main > div").hide();
         $("div#section-" + location.hash.substring(3)).show();
     }
-});
+}
 
 function populateSheetTables(types) {
     let refreshTable;
@@ -645,10 +719,15 @@ function download(data, filename, type) {
 </header>
 <main class="w3-theme-l5">
 <div id="section-sheet">
+    <h1 id="sheet-title">You 2022</h1>
+    <div class="canvas-container">
+    <canvas id="chart-worth"></canvas>
+    </div>
     <div class="grid-container">
         <div id="sheet-title-box">
-            <h1 id="sheet-title">You 2022</h1>
-            <button class="dropdown-button" id="sheet-options">&#9660;</button>
+            <button id="sheet-options-chart">&#9660;</button>
+			<button id="sheet-options-annual">annual</button>
+			<button id="sheet-options-monthly">monthly</button>
         </div>
         <div class="sheet-gross-label">
             <h4>gross worth</h4>
@@ -905,6 +984,22 @@ function download(data, filename, type) {
     <span class="text-code">EXPENSE    | 26-Mar | invest    | $300</span><br>
     <span class="text-code">EXPENSE    | 26-Apr | invest    | $300</span><br>
     <span class="text-code">INCOME     | 26-May | invest W/ | $1000</span>
+    <h4>Q: How do I record credit card transaction?</h4>
+    <p>A: When you charge a purchase on a credit card, you haven't actually paid
+    anything yet. Since this is a deferred expense, you can record it as a
+    negative obligation. When you pay the credit card balance at the end of 
+    the month, then it is an expense, paired with a positive obligation of 
+    the same amount.</p>
+    <span class="text-code">OBLIGATION |  5 Jul | clothing | -$50</span><br>
+    <span class="text-code">OBLIGATION |  6 Jul | grocery  | -$80</span><br>
+    <span class="text-code">OBLIGATION |  7 Jul | coffee   | -$20</span><br>
+    <span class="text-code">EXPENSE    | 31 Jul | cc bal   | $150</span><br>
+    <span class="text-code">OBLIGATION | 31 Jul | cc bal   | $150</span>
+    <p>However, if you are the kind of person that uses a credit card as 
+    if it is a debit card and fully pays off the balance every month,
+    you could just record every credit card charge like a normal expense.
+    In this case, the payment of credit card balance at the end of the month
+    is not recorded.</p>
     <h4>Q: How do I record cash withdrawal?</h4>
     <p>** This is written assuming that you are a millenial adult living in a 
     fairly developed country who doesn't really use cash for significant expenses all 
