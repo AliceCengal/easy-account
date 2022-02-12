@@ -53,7 +53,6 @@ div#section-sheet {                  width: 100%;    }
 div ul {                             margin-left: 20px;    }
 table {                              border-collapse: collapse;    }
 table td {                           padding: 5px;    }
-table.sheet-table {                  background-color: white;    }
 td.sheet-table-title {               text-align: center !important;    }
 table.sheet-table td:last-child {    text-align: right;    }
 .firstline td {
@@ -95,6 +94,27 @@ div.canvas-container {
     height: 300px;
     margin: 0 auto;
 }
+div#sheet-template {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    display: none;
+    grid-template-columns: 1fr 1fr 1fr 10px;
+    grid-template-rows: auto auto;
+    grid-gap: 10px;
+}
+#sheet-yearly-add { 
+    grid-area: 1 / 3 / span 1 / span 1;
+    display: flex;
+    justify-content: center;
+}
+#sheet-yearly-table { grid-area: 2 / 3 / span 1 / span 1 }
+#sheet-monthly-add { 
+    grid-area: 1 / 2 / span 1 / span 1;
+    display: flex;
+    justify-content: center;
+}
+#sheet-monthly-table { grid-area: 2 / 2 / span 1 / span 1 }
 .grid-container {
     width: 100%;
     margin: 0px;
@@ -105,7 +125,8 @@ div.canvas-container {
             auto auto auto auto auto auto auto auto auto;
     grid-gap: 10px;
 }
-#sheet-title-box {    
+#sheet-title-box {
+    padding: 0px;
     grid-area: 1 / 1 / span 1 / span 1; 
     display: flex;
     flex-direction: row;
@@ -114,6 +135,7 @@ div.canvas-container {
 }
 #sheet-title-box * { margin: 5px; }
 .sheet-gross-label {
+    padding: 0px;
     grid-area: 1 / 2 / span 1 / span 1;
     display: flex;
     flex-direction: row;
@@ -121,13 +143,24 @@ div.canvas-container {
     align-items: flex-end;
 }
 .sheet-net-label {
+    padding: 0px;
     grid-area: 1 / 3 / span 1 / span 1;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
 }
-.sheet-table {                 margin-bottom: auto; }
+table.sheet-table {                 
+    margin-bottom: auto;
+    background-color: white;    
+}
+table.sheet-template-table {
+    margin-bottom: auto;
+    background-color: white;
+}
+table.sheet-template-table td {
+    text-align: center;
+}
 #sheet-income-table {          grid-area: 2 / 1 / span 1 / span 1;    }
 #sheet-expense-table {         grid-area: 2 / 2 / span 1 / span 1; }
 #sheet-obligation-table {      grid-area: 2 / 3 / span 1 / span 1;    }
@@ -235,8 +268,18 @@ function AccountDatabase(name, year) {
         this.template_monthly.push({name: name, amount: amount});
     };
     
+    this.deleteMonthly = function(name) {
+        this.template_monthly = this.template_monthly.filter(
+            function(a) { return a.name !== name; });
+    };
+    
     this.addYearlyExpense = function(name, amount) {
         this.template_yearly.push({name: name, amount: amount});
+    };
+    
+    this.deleteYearly = function(name) {
+        this.template_yearly = this.template_yearly.filter(
+            function(a) { return a.name !== name; });
     };
     
     this.addTransaction = function(dateInput, name, type, amount) {
@@ -588,6 +631,75 @@ $(document).ready(function() {
             chart.css("display", "none");
         }
     });
+    
+    $("button#sheet-options-template").click(function(e) {
+        let panel1 = $("div#sheet-template");
+        if (panel1.css("display") === "none") {
+            panel1.css("display", "grid");
+        } else {
+            panel1.hide();
+        }
+    });
+    
+    $("#sheet-monthly-table input").on("keyup", function(e){
+        if (e.which === 13) {
+            e.preventDefault();
+            jsondb.addMonthlyExpense(
+                $("input#sheet-monthly-new-detail").val(),
+                $("input#sheet-monthly-new-amount").val()
+            );
+            populateTemplateTables();
+        }
+    });
+    
+    $("#sheet-monthly-add button").click(function(e) {
+        let monthly = jsondb.template_monthly;
+        if (monthly.length === 0) return;
+        
+        let month = $("#sheet-monthly-add input").val();
+        if (month === "") return alert("Please specify which month");
+        if (Number.isNaN(Number(month))) return alert("Invalid month input");
+        if (Number(month) > 12 || Number(month) < 1) return alert("Invalid month input");
+        
+        let d = new Date();
+        d.setFullYear(jsondb.year, Number(month) - 1, 1);
+        
+        monthly.forEach(function(curr) {
+            jsondb.addTransaction(d, curr.name, "expense", curr.amount);
+        });
+        
+        populateSheetTables();
+    });
+    
+    $("#sheet-yearly-table input").on("keyup", function(e){
+        if (e.which === 13) {
+            e.preventDefault();
+            jsondb.addYearlyExpense(
+                $("input#sheet-yearly-new-detail").val(),
+                $("input#sheet-yearly-new-amount").val()
+            );
+            populateTemplateTables();
+        }
+    });
+    
+    $("#sheet-yearly-add button").click(function(e) {
+        let yearly = jsondb.template_yearly;
+        if (yearly.length === 0) return;
+        
+        let month = $("#sheet-yearly-add input").val();
+        if (month === "") return alert("Please specify which month.");
+        if (Number(month) > 12 || Number(month) < 1) return alert("Invalid month input");
+        
+        let d = new Date();
+        d.setFullYear(jsondb.year, Number(month) - 1, 1);
+        
+        yearly.forEach(function(curr) {
+            jsondb.addTransaction(d, curr.name, "obligation", Number(curr.amount) / -12);
+        });
+        
+        populateSheetTables();
+    });
+    
 });
 
 $(window).on('hashchange', hashChangeHandler);
@@ -598,6 +710,33 @@ function hashChangeHandler(e) {
         $("main > div").hide();
         $("div#section-" + location.hash.substring(3)).show();
     }
+}
+
+function populateTemplateTables() {
+    $("table.sheet-template-table tbody").empty();
+    ["yearly", "monthly"].forEach(function(currType) {
+        let table = $("#sheet-" + currType + "-table");
+        //table.empty();
+        jsondb['template_' + currType].forEach(function(curr) {
+            let row = document.createElement("tr");
+            $(row).append(
+                $(document.createElement("td")).text( curr.name ),
+                $(document.createElement("td")).text( curr.amount ));
+            $(row).dblclick(function(e) {
+                let name = curr.name;
+                let amount = curr.amount;
+                $("#sheet-" + currType + "-new-detail").val(name);
+                $("#sheet-" + currType + "-new-amount").val(amount);
+                
+                if (currType === "yearly") jsondb.deleteYearly(name);
+                else jsondb.deleteMonthly(name);
+                
+                populateTemplateTables();
+            });
+            table.append(row);
+        });
+    
+    });
 }
 
 function populateSheetTables(types) {
@@ -714,20 +853,43 @@ function download(data, filename, type) {
     <button id="h-help" onclick="location.hash = this.id">Help</button>
     <button id="h-about" onclick="location.hash = this.id">About</button>
 </nav>
-<div class="spacer1"></div>
+<div class="spacer1"><!-- spacer --></div>
 <div>site design and logo<br>&copy; Athran Zuhail <span id="copy-current-year">2022</span></div>
 </header>
 <main class="w3-theme-l5">
 <div id="section-sheet">
     <h1 id="sheet-title">You 2022</h1>
-    <div class="canvas-container">
-    <canvas id="chart-worth"></canvas>
+    <div class="canvas-container"><canvas id="chart-worth"></canvas></div>
+    <div id="sheet-template">
+        <div id="sheet-monthly-add">
+            <button>Copy to spreadsheet</button>
+            <input type="text" placeholder="month" size="2">
+        </div>
+        <table class="sheet-template-table" id="sheet-monthly-table">
+            <thead>
+                <tr><th>Monthly Expense</th><th>Amount</th></tr>
+                <tr><th><input type="text" id="sheet-monthly-new-detail"></th>
+                    <th><input type="text" id="sheet-monthly-new-amount" size="2"></th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="sheet-yearly-add">
+            <button>Copy to spreadsheet</button>
+            <input type="text" placeholder="month" size="2">
+        </div>
+        <table class="sheet-template-table" id="sheet-yearly-table">
+            <thead>
+                <tr><th>Yearly Expense</th><th>Amount</th></tr>
+                <tr><th><input type="text" id="sheet-yearly-new-detail"></th>
+                    <th><input type="text" id="sheet-yearly-new-amount" size="2"></th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
     <div class="grid-container">
         <div id="sheet-title-box">
             <button id="sheet-options-chart">&#9660;</button>
-			<button id="sheet-options-annual">annual</button>
-			<button id="sheet-options-monthly">monthly</button>
+			<button id="sheet-options-template">template</button>
         </div>
         <div class="sheet-gross-label">
             <h4>gross worth</h4>
