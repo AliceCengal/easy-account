@@ -43,18 +43,15 @@ main {
     overflow-y: scroll;
     overflow-x: hidden;
 }
-main * {        padding: 10px;    }
-main > div {    display: none; width: 66%;    }
-div#section-about {
-    display: block;
-    width: 66%;
-}
-div#section-sheet {                  width: 100%;    }
-div ul {                             margin-left: 20px;    }
-table {                              border-collapse: collapse;    }
-table td {                           padding: 5px;    }
-td.sheet-table-title {               text-align: center !important;    }
-table.sheet-table td:last-child {    text-align: right;    }
+main * {            padding: 10px; }
+section {           display: none; width: 66%;    }
+section#about {     display: block; }
+section#sheet {     width: 100%;    }
+section ul {                            margin-left: 20px;    }
+table {                             border-collapse: collapse;    }
+table td {                          padding: 5px;    }
+td.sheet-table-title {              text-align: center !important;    }
+table.sheet-table td:last-child {   text-align: right;    }
 .firstline td {
     padding: 0px;
     border-bottom: 2px solid gray;
@@ -76,18 +73,17 @@ strong {            padding: 0px; }
     font-weight: bold;
     border-radius: 50%;
 }
-button#download-download {
+section#download button {
     display: block;
     margin: 0 auto;
 }
-div#section-help p { text-align: justify; }
+section#help p { text-align: justify; }
 .text-code {
     font-family: monospace;
     font-size: large;
     white-space: pre;
 }
 div.canvas-container {
-/* canvas#chart-worth {*/
     position: relative;
     display: none;
     width: 90%;
@@ -125,7 +121,7 @@ div#sheet-template {
             auto auto auto auto auto auto auto auto auto;
     grid-gap: 10px;
 }
-#sheet-title-box {
+div#sheet-title-box {
     padding: 0px;
     grid-area: 1 / 1 / span 1 / span 1; 
     display: flex;
@@ -133,8 +129,8 @@ div#sheet-template {
     justify-content: flex-start;
     align-items: flex-end; 
 }
-#sheet-title-box * { margin: 5px; }
-.sheet-gross-label {
+div#sheet-title-box * { margin: 5px; }
+div#sheet-gross-worth {
     padding: 0px;
     grid-area: 1 / 2 / span 1 / span 1;
     display: flex;
@@ -142,7 +138,7 @@ div#sheet-template {
     justify-content: space-between;
     align-items: flex-end;
 }
-.sheet-net-label {
+div#sheet-net-worth {
     padding: 0px;
     grid-area: 1 / 3 / span 1 / span 1;
     display: flex;
@@ -204,7 +200,7 @@ table.sheet-template-table td {
     display: inline;
     margin: 0px;
 }
-#load-preview {        white-space: pre; }
+p#load-preview {        white-space: pre; }
 
 /* https://www.w3schools.com/css/css_tooltip.asp */
 /* Tooltip container */
@@ -238,6 +234,7 @@ table.sheet-template-table td {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
 const today = new Date();
+var chartRef = {};
 var jsondb = {
     name: "You",
     year: "2022",
@@ -252,8 +249,6 @@ var jsondb = {
     transactions: [
     ]
 };
-
-var chartRef = {};
 
 function AccountDatabase(name, year) {
     this.name = name;
@@ -429,7 +424,7 @@ $(document).ready(function() {
     });
     
     // initialize and create the spreadsheet
-    $("button#new-create").click(function(e) {
+    $("section#new button").click(function(e) {
         //let accountnew = accountDatabaseFromFile(jsondb);
         //jsondb = accountnew;
         jsondb = new AccountDatabase(
@@ -466,7 +461,7 @@ $(document).ready(function() {
         jsondb.colorTheme = $("select#new-color-theme").val();
         
         populateSheetTables();
-        $("h1#sheet-title").text(
+        $("section#sheet h1").text(
             $("input#new-name").val() + " " +
             $("input#new-year").val());
         //sectionChange("sheet");
@@ -475,7 +470,7 @@ $(document).ready(function() {
     });
     
     // Load form
-    $("input#load-file").change(function(e) {
+    $("section#load input").change(function(e) {
         //console.log("file chosen");
         //console.log(e.currentTarget.value);
         
@@ -498,14 +493,14 @@ $(document).ready(function() {
             
             // Load the file content into the db object and switch to
             // the spreadsheet page
-            $("button#load-create").click(function(e) {
+            $("section#load button").click(function(e) {
                 
                 // create the DB object
                 jsondb = accountDatabaseFromFile(data);
                 
                 // fill in the spreadsheet
                 populateSheetTables();
-                $("h1#sheet-title").text(
+                $("section#sheet h1").text(
                     data.name + " " + data.year);
                 swapColorTheme(jsondb.colorTheme);
                 
@@ -519,7 +514,7 @@ $(document).ready(function() {
     });
     
     // Download form
-    $("button#download-download").click(function(e) {
+    $("section#download button").click(function(e) {
         download(JSON.stringify(jsondb), 
                 jsondb.name + "-" + jsondb.year, 
                 "application/json");
@@ -707,8 +702,8 @@ $(window).on('hashchange', hashChangeHandler);
 function hashChangeHandler(e) {
     // handle the URI hash mark
     if (location.hash !== '') {
-        $("main > div").hide();
-        $("div#section-" + location.hash.substring(3)).show();
+        $("section").hide();
+        $("section#" + location.hash.substring(3)).show();
     }
 }
 
@@ -791,16 +786,11 @@ function populateSheetTables(types) {
         );
     });
     
-    $("#sheet-gross-worth").text(
-        jsondb.currency + " " + (Number($("#sheet-income-total").text()) - 
-                Number($("#sheet-expense-total").text())).toFixed(2)
-    );
-    
-    $("#sheet-net-worth").text(
-        jsondb.currency + " " + (
-                Number($("#sheet-gross-worth").text().replaceAll(jsondb.currency, "")) + 
-                Number($("#sheet-obligation-total").text())).toFixed(2)
-    );
+    let grossWorth = (Number($("#sheet-income-total").text()) - 
+                Number($("#sheet-expense-total").text()));
+    let netWorth = grossWorth + Number($("#sheet-obligation-total").text());
+    $("div#sheet-gross-worth span").text(jsondb.currency + " " + grossWorth.toFixed(2));
+    $("div#sheet-net-worth span").text(jsondb.currency + " " + netWorth.toFixed(2));
 }
 
 function swapColorTheme(colorTheme) {
@@ -857,8 +847,8 @@ function download(data, filename, type) {
 <div>site design and logo<br>&copy; Athran Zuhail <span id="copy-current-year">2022</span></div>
 </header>
 <main class="w3-theme-l5">
-<div id="section-sheet">
-    <h1 id="sheet-title">You 2022</h1>
+<section id="sheet">
+    <h1>You 2022</h1>
     <div class="canvas-container"><canvas id="chart-worth"></canvas></div>
     <div id="sheet-template">
         <div id="sheet-monthly-add">
@@ -891,13 +881,13 @@ function download(data, filename, type) {
             <button id="sheet-options-chart">&#9660;</button>
 			<button id="sheet-options-template">template</button>
         </div>
-        <div class="sheet-gross-label">
+        <div id="sheet-gross-worth">
             <h4>gross worth</h4>
-            <span class="text-code" id="sheet-gross-worth">0.00</span>
+            <span class="text-code">0.00</span>
         </div>
-        <div class="sheet-net-label">
+        <div id="sheet-net-worth">
             <h4>net worth</h4>
-            <span class="text-code" id="sheet-net-worth">0.00</span>
+            <span class="text-code">0.00</span>
         </div>
         <table class="sheet-table" id="sheet-income-table">
             <tr class="topline"><td colspan="3" class="sheet-table-title">INCOME</td></tr>
@@ -964,8 +954,8 @@ function download(data, filename, type) {
         <table class="sheet-table" id="sheet-obligation-table-11"></table>
     </div>
     <div>&nbsp;<!-- spacer --></div>
-</div>
-<div id="section-new">
+</section>
+<section id="new">
     <h1>Create new spreadsheet</h1>
     <p>Make sure you have saved/downloaded any active spreadsheet,
     because creating a new one will overwrite the current one.</p>
@@ -1038,19 +1028,19 @@ function download(data, filename, type) {
                 <option value="black">Black</option>
                 <option value="none">None</option>
             </select></td></tr>
-        <tr><td></td><td></td><td><button id="new-create">CREATE</button></td></tr>
+        <tr><td></td><td></td><td><button>CREATE</button></td></tr>
     </table>
-</div>
-<div id="section-load">
+</section>
+<section id="load">
     <h1>Load a previously saved spreadsheet</h1>
     <p>It should be a <span class="text-code">.json</span> file:</p>
-    <input type="file" id="load-file" accept=".json">
+    <input type="file" accept=".json">
     <p id="load-preview"></p>
     <p>Make sure you have saved/downloaded any active spreadsheet,
     because loading a new one will overwrite the current one.</p>
-    <button id="load-create">LOAD</button>
-</div>
-<div id="section-download">
+    <button>LOAD</button>
+</section>
+<section id="download">
     <h1>Download the spreadsheet</h1>
     <p>The app will download the data you had entered into a file. This file is
     not excrypted or obfuscated in any way, it's just structured into JSON.
@@ -1061,9 +1051,9 @@ function download(data, filename, type) {
     <p>Keep this file in a dusty corner of your computer. The next time
     you want to use this app again, find that file and <a href="#h-load">Load</a> 
     it back into the app.</p>
-    <button id="download-download">DOWNLOAD</button>
-</div>
-<div id="section-help">
+    <button>DOWNLOAD</button>
+</section>
+<section id="help">
     <h1>Help for you</h1>
     <h4>Q: How do I edit or delete an entry?</h4>
     <p>A: DOUBLE-CLICK the row that you want to edit or delete. That row will be deleted 
@@ -1184,8 +1174,8 @@ function download(data, filename, type) {
     and your current total Obligation into the Starting Obligation field</p>
     
     <div>&nbsp;<!-- spacer --></div>
-</div>
-<div id="section-about">
+</section>
+<section id="about">
     <h1>About this app</h1>
     <p>
         This is an app for tracking and analyzing simple personal income, expense, 
@@ -1202,9 +1192,10 @@ function download(data, filename, type) {
         you're done, otherwise all of your progress will be lost.
     </p>
     <p>If you need any further <a href="#h-help">Help</a>, feel free to ask any question.</p>
-</div>
+</section>
 <!--
 <button class="round-button" style="display:none">&nbsp;&plus;&nbsp;</button>
 -->
 </main>
 </body>
+</html>
