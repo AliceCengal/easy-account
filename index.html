@@ -333,7 +333,7 @@ function AccountDatabase(name, year) {
     };
     
     this.calculateWorthByDay = function() {
-        let wbd = Array(365).fill([ 0 , 0 ]);
+        let wbd = Array(365).fill([ 0 , 0 , 0]);
         let dateIter = new Date();
         dateIter.setFullYear(this.year, 0, 1);
         let trxIter = Array.from(this.transactions).reverse();
@@ -568,7 +568,21 @@ $(document).ready(function() {
     $("button#sheet-options-chart").click(function(e) {
         let chart = $("div.canvas-container");
         if (chart.css("display") === 'none') {
-            let worths = jsondb.calculateWorthByDay();
+            let twoDaySmoother = function(prev, curr, ix) {
+                if (ix % 2 == 0) { 
+                    //console.log("first branch: " + curr + " " + ix);
+                    prev.unshift(curr);
+                    //console.log(prev);
+                    return prev;                    
+                } else {
+                    //console.log("second branch : " + curr);
+                    prev[0][0] = (prev[0][0] + curr[0])/2;
+                    prev[0][1] = (prev[0][1] + curr[1])/2;
+                    return prev;
+                }
+            };
+            let worths = jsondb.calculateWorthByDay()
+                    .reduce(twoDaySmoother, []).reverse();
             let grossworths = worths.map((a) => a[0]);
             let networths = worths.map((a) => a[1]);
             let nodeColors1 = worths.map(
@@ -611,8 +625,7 @@ $(document).ready(function() {
                 options: {
                     legend: {display: false},
                     maintainAspectRatio: false,
-                    responsive: true,
-                    showXLabels: 12
+                    responsive: true
                 }
             };
             
@@ -878,7 +891,7 @@ function download(data, filename, type) {
     </div>
     <div class="grid-container">
         <div id="sheet-title-box">
-            <button id="sheet-options-chart">&#9660;</button>
+            <button id="sheet-options-chart">chart</button>
 			<button id="sheet-options-template">template</button>
         </div>
         <div id="sheet-gross-worth">
