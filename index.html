@@ -586,7 +586,7 @@ $(document).ready(function() {
             let grossworths = worths.map((a) => a[0]);
             let networths = worths.map((a) => a[1]);
             let nodeColors1 = worths.map(
-                (a) => (a[2] % 2 == 0 ? "blue" : "green"));
+                (a) => (a[2] % 2 == 0 ? "#33DCFF" : "#A0FF33"));
             let nodeColors2 = worths.map(
                 (a) => (a[2] % 2 == 0 ? "red" : "yellow"));
             let labels = worths.map((a) => Number(a[2] + 1).toString())
@@ -609,12 +609,16 @@ $(document).ready(function() {
                     {
                         label: "Gross",
                         data: grossworths,
-                        borderColor: nodeColors1
+                        fill: false,
+                        borderColor: "rgba(0,0,200,0.2)",
+                        backgroundColor: nodeColors1
                     },
                     {
                         label: "Net",
                         data: networths,
-                        borderColor: nodeColors2
+                        fill: false,
+                        borderColor: "rgba(200,0,0,0.2)",
+                        backgroundColor: nodeColors2
                     }
                 ]
             };
