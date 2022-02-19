@@ -333,7 +333,7 @@ function AccountDatabase(name, year) {
     };
     
     this.calculateWorthByDay = function() {
-        let wbd = Array(365).fill([ 0 , 0 , 0]);
+        let wbd = Array(365).fill([ 0 , 0 , 0, 0]);
         let dateIter = new Date();
         dateIter.setFullYear(this.year, 0, 1);
         let trxIter = Array.from(this.transactions).reverse();
@@ -366,7 +366,7 @@ function AccountDatabase(name, year) {
                 
             }
             
-            arr[ix] = [ grossworth, networth, dateIter.getMonth() ];
+            arr[ix] = [ grossworth, networth, dateIter.getMonth(), dateIter.toLocaleDateString() ];
             
             if (ix !== 0) { 
                 arr[ix][0] += arr[ix - 1][0];
@@ -383,6 +383,14 @@ function accountDatabaseFromFile(o) {
     let accountDB = new AccountDatabase(o.name, o.year);
     if (typeof(o.currency) !== 'undefined')       accountDB.currency = o.currency;
     if (typeof(o.colorTheme) !== 'undefined')     accountDB.colorTheme = o.colorTheme;
+    
+    o.template_monthly.forEach(function(curr) {
+        accountDB.addMonthlyExpense(curr.name, curr.amount);
+    });
+    
+    o.template_yearly.forEach(function(curr) {
+        accountDB.addYearlyExpense(curr.name, curr.amount);
+    });
     
     o.transactions.forEach(function(curr) {
         accountDB.addTransaction(
@@ -500,6 +508,8 @@ $(document).ready(function() {
                 
                 // fill in the spreadsheet
                 populateSheetTables();
+                populateTemplateTables();
+                
                 $("section#sheet h1").text(
                     data.name + " " + data.year);
                 swapColorTheme(jsondb.colorTheme);
@@ -581,26 +591,33 @@ $(document).ready(function() {
                     return prev;
                 }
             };
+            
+            let threeDaySmoother = function(prev, curr, ix) {
+                if (ix % 3 == 0) {
+                    prev.unshift(curr); 
+                    return prev;
+                } if (ix % 3 == 1) {
+                    prev[0][0] = (prev[0][0] + curr[0])/2;
+                    prev[0][1] = (prev[0][1] + curr[1])/2;
+                    return prev;
+                } if (ix % 3 == 2) {
+                    prev[0][0] = (prev[0][0]*2 + curr[0])/3;
+                    prev[0][1] = (prev[0][1]*2 + curr[1])/3;
+                    return prev;
+                }
+            };
+            
             let worths = jsondb.calculateWorthByDay()
-                    .reduce(twoDaySmoother, []).reverse();
-            let grossworths = worths.map((a) => a[0]);
-            let networths = worths.map((a) => a[1]);
+                    .reduce(threeDaySmoother, []).reverse();
+            let grossworths = worths.map((a) => Math.round(a[0]*100)/100);
+            let networths = worths.map((a) => Math.round(a[1]*100)/100);
+            
             let nodeColors1 = worths.map(
                 (a) => (a[2] % 2 == 0 ? "#33DCFF" : "#A0FF33"));
             let nodeColors2 = worths.map(
                 (a) => (a[2] % 2 == 0 ? "red" : "yellow"));
-            let labels = worths.map((a) => Number(a[2] + 1).toString())
-                .reduce((cumm, curr) => {
-                    if (cumm.length === 0 || cumm[0][0] !== curr) {
-                        cumm.unshift([curr]);
-                        return cumm;
-                    } else {
-                        cumm[0].push('');
-                        return cumm;
-                    }
-                }, [])
-                .reverse().flat();
-            let labels2 = worths.map((a) => Number(a[2] + 1).toString());
+            
+            let labels2 = worths.map((a) => a[3]);
             
             //console.log(labels);
             let data = {
@@ -993,13 +1010,14 @@ function download(data, filename, type) {
                 <span class="tooltiptext w3-theme-l1">
                     This spreadsheet will only be valid for one year, 
                     from 1 January to 31 December. Start a new spreadsheet at
-                    the start of a new calendar year.
+                    the start of a new calendar year. Non-calendar fiscal year
+                    is not supported.
                 </span></td></tr>
         <tr><td>Your date format</td><td>:</td>
             <td><input type="text" id="new-date-fmt" readonly></td>
             <td class="tooltip">&#x1F6C8;
                 <span class="tooltiptext w3-theme-l1">
-                    There are many variations on how a date is written around 
+                    There are many variations in how a date is written around 
                     the world. Displayed here is how your browser is configured
                     to display and interpret today's date. Note the month and day
                     order, and the separator used. Please use this exact 
@@ -1013,12 +1031,29 @@ function download(data, filename, type) {
                     The total of your checking account balance(s), 
                     also known as your gross worth.
                 </span></td></tr>
-        <tr><td>Starting Obligation</td><td>:</td><td>
-            <input type="text" id="new-debt" placeholder="optional"></td></tr>
-        <tr><td>Starting month</td><td>:</td><td>
-            <input type="text" id="new-month" placeholder="optional: 1, 2, 3, ..."></td></tr>
-        <tr><td>Currency label</td><td>:</td><td>
-            <input type="text" id="new-currency" placeholder="optional"></td></tr>
+        <tr><td>Starting Obligation</td><td>:</td>
+            <td><input type="text" id="new-debt" placeholder="optional"></td>
+            <td class="tooltip">&#x1F6C8;
+                <span class="tooltiptext w3-theme-l1">
+                    The total of outstanding obligation that you want to track in 
+                    this spreadsheet. Probably should leave this blank, it's 
+                    better to record your obligations as distinct entries rather
+                    than lumping it together.
+                </span></td></tr>
+        <tr><td>Starting month</td><td>:</td>
+            <td><input type="text" id="new-month" placeholder="optional: 1, 2, 3, ..."></td>
+            <td class="tooltip">&#x1F6C8;
+                <span class="tooltiptext w3-theme-l1">
+                    If you enter any amount in the Starting-* fields above, then by default
+                    they will be recorded on the date 1/1. Use this field to specify a
+                    different starting month.
+                </span></td></tr>
+        <tr><td>Currency label</td><td>:</td>
+            <td><input type="text" id="new-currency" placeholder="optional"></td>
+            <td class="tooltip">&#x1F6C8;
+                <span class="tooltiptext w3-theme-l1">
+                    Purely cosmetic. Multi-currency input and conversion is not supported. 
+                </span></td></tr>
         <tr><td>Colour theme</td><td>:</td><td>
             <select id="new-color-theme">
                 <option value="red">Red</option>
@@ -1065,9 +1100,9 @@ function download(data, filename, type) {
     copy, distribute, or modify it whichever way you want.</p>
     <p>However, manual modification may cause that file to be in an invalid
     format, and thus unrecognizable and unusable by this app.</p>
-    <p>Keep this file in a dusty corner of your computer. The next time
-    you want to use this app again, find that file and <a href="#h-load">Load</a> 
-    it back into the app.</p>
+    <p>Keep this file in a dusty corner of your computer, or upload it to a secure
+    file hosting service. The next time you want to use this app again, find 
+    that file and <a href="#h-load">Load</a> it back into the app.</p>
     <button>DOWNLOAD</button>
 </section>
 <section id="help">
@@ -1169,6 +1204,9 @@ function download(data, filename, type) {
     you could just record every credit card charge like a normal expense.
     In this case, the payment of credit card balance at the end of the month
     is not recorded.</p>
+    <span class="text-code">EXPENSE |  5 Jul | clothing | $50</span><br>
+    <span class="text-code">EXPENSE |  6 Jul | grocery  | $80</span><br>
+    <span class="text-code">EXPENSE |  7 Jul | coffee   | $20</span>
     <h4>Q: How do I record cash withdrawal?</h4>
     <p>** This is written assuming that you are a millenial adult living in a 
     fairly developed country who doesn't really use cash for significant expenses all 
@@ -1183,12 +1221,12 @@ function download(data, filename, type) {
     record it as such. Let's say you withdraw $500 to buy an item for $467 cash.</p>
     <span class="text-code">EXPENSE | 26-Mar | antique clock | $467</span><br>
     <span class="text-code">EXPENSE | 26-Mar | cash withdraw |  $33</span>
-    <h4>Q: Why doesn't the app save data to the server</h4>
+    <h4>Q: Why doesn't the app save data to the server?</h4>
     <p>A: That would be convenient for sure, but is a privacy risk. You should store
-    your financial records locally.</p>
-    <h4>Q: How do I transition to the next financial year</h4>
+    your financial records locally, or on a secure file hosting service.</p>
+    <h4>Q: How do I transition to the next financial year?</h4>
     <p>A: On the New page, type your current Gross Worth into the Starting Balance field,
-    and your current total Obligation into the Starting Obligation field</p>
+    and your current total Obligation into the Starting Obligation field.</p>
     
     <div>&nbsp;<!-- spacer --></div>
 </section>
