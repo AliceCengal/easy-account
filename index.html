@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
 <meta>
 <title>Easy Personal Accounting</title>
@@ -433,12 +433,12 @@ $(document).ready(function() {
     
     // initialize and create the spreadsheet
     $("section#new button").click(function(e) {
-        //let accountnew = accountDatabaseFromFile(jsondb);
-        //jsondb = accountnew;
+        // Create new account object, bind to global state
         jsondb = new AccountDatabase(
             $("input#new-name").val(),
             $("input#new-year").val());
         
+        // Let use specify which month to start, or else default to january
         let startingMonth = $("input#new-month").val();
         let startingDate = new Date();
         startingDate.setFullYear(
@@ -447,6 +447,7 @@ $(document).ready(function() {
             1
         );
         
+        // add the starting balance as an income transaction
         let startingBalance = $("input#new-balance").val();
         if (startingBalance !== '') {
             jsondb.addTransaction(
@@ -456,6 +457,7 @@ $(document).ready(function() {
                 startingBalance);
         }
         
+        // add the starting obligation as an obligation transaction
         let startingObligation = $("input#new-debt").val();
         if (startingObligation !== '') {
             jsondb.addTransaction(
@@ -465,14 +467,17 @@ $(document).ready(function() {
                 startingObligation);
         }
         
+        // add some user settings to the account object
         jsondb.currency = $("input#new-currency").val();
         jsondb.colorTheme = $("select#new-color-theme").val();
         
+        // Initialize the spreadsheet
         populateSheetTables();
         $("section#sheet h1").text(
             $("input#new-name").val() + " " +
             $("input#new-year").val());
-        //sectionChange("sheet");
+        
+        // switch page to the spreadsheet
         location.hash = "h-sheet";
         $("button#h-sheet").prop("disabled", false);
     });
@@ -489,8 +494,7 @@ $(document).ready(function() {
                 data = JSON.parse(fr.result);
             } catch (err) {
                 console.log(err);
-                alert("Invalid file.");
-                return;
+                return alert("Invalid file.");
             }
             
             $("p#load-preview").text(
@@ -515,7 +519,6 @@ $(document).ready(function() {
                 swapColorTheme(jsondb.colorTheme);
                 
                 // change page
-                //sectionChange("sheet");
                 location.hash = "h-sheet";
                 $("button#h-sheet").prop("disabled", false);
             });
@@ -686,9 +689,12 @@ $(document).ready(function() {
         if (monthly.length === 0) return;
         
         let month = $("#sheet-monthly-add input").val();
-        if (month === "") return alert("Please specify which month");
-        if (Number.isNaN(Number(month))) return alert("Invalid month input");
-        if (Number(month) > 12 || Number(month) < 1) return alert("Invalid month input");
+        if (month === "") 
+            return alert("Please specify which month");
+        if (Number.isNaN(Number(month))) 
+            return alert("Invalid month input");
+        if (Number(month) > 12 || Number(month) < 1) 
+            return alert("Invalid month input");
         
         let d = new Date();
         d.setFullYear(jsondb.year, Number(month) - 1, 1);
