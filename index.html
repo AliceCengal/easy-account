@@ -131,6 +131,15 @@ div#sheet-title-box {
     align-items: flex-end; 
 }
 div#sheet-title-box * { margin: 5px; }
+div#sheet-chart-types {
+    margin: 4px;
+    padding: 0px;
+    border: 2px solid gray;
+}
+div#sheet-chart-types * {
+    padding: 5px;
+    margin: 4px;
+}
 div#sheet-gross-worth {
     padding: 0px;
     grid-area: 1 / 2 / span 1 / span 1;
@@ -579,89 +588,20 @@ $(document).ready(function() {
         });
     });
     
+    $('div#sheet-chart-types').hide();
     $("button#sheet-options-chart").click(function(e) {
-        let chart = $("div.canvas-container");
-        if (chart.css("display") === 'none') {
-            let twoDaySmoother = function(prev, curr, ix) {
-                if (ix % 2 == 0) { 
-                    //console.log("first branch: " + curr + " " + ix);
-                    prev.unshift(curr);
-                    //console.log(prev);
-                    return prev;                    
-                } else {
-                    //console.log("second branch : " + curr);
-                    prev[0][0] = (prev[0][0] + curr[0])/2;
-                    prev[0][1] = (prev[0][1] + curr[1])/2;
-                    return prev;
-                }
-            };
-            
-            let threeDaySmoother = function(prev, curr, ix) {
-                if (ix % 3 == 0) {
-                    prev.unshift(curr); 
-                    return prev;
-                } if (ix % 3 == 1) {
-                    prev[0][0] = (prev[0][0] + curr[0])/2;
-                    prev[0][1] = (prev[0][1] + curr[1])/2;
-                    return prev;
-                } if (ix % 3 == 2) {
-                    prev[0][0] = (prev[0][0]*2 + curr[0])/3;
-                    prev[0][1] = (prev[0][1]*2 + curr[1])/3;
-                    return prev;
-                }
-            };
-            
-            let worths = jsondb.calculateWorthByDay()
-                    .reduce(threeDaySmoother, []).reverse();
-            let grossworths = worths.map((a) => Math.round(a[0]*100)/100);
-            let networths = worths.map((a) => Math.round(a[1]*100)/100);
-            
-            let nodeColors1 = worths.map(
-                (a) => (a[2] % 2 == 0 ? "#33DCFF" : "#A0FF33"));
-            let nodeColors2 = worths.map(
-                (a) => (a[2] % 2 == 0 ? "red" : "yellow"));
-            
-            let labels2 = worths.map((a) => a[3]);
-            
-            //console.log(labels);
-            let data = {
-                labels: labels2,
-                datasets: [
-                    {
-                        label: "Gross",
-                        data: grossworths,
-                        fill: false,
-                        borderColor: "rgba(0,0,200,0.2)",
-                        backgroundColor: nodeColors1
-                    },
-                    {
-                        label: "Net",
-                        data: networths,
-                        fill: false,
-                        borderColor: "rgba(200,0,0,0.2)",
-                        backgroundColor: nodeColors2
-                    }
-                ]
-            };
-            
-            let config = {
-                type: 'line',
-                data: data,
-                options: {
-                    legend: {display: false},
-                    maintainAspectRatio: false,
-                    responsive: true
-                }
-            };
-            
-            let ctx = document.getElementById('chart-worth').getContext('2d');
-            chartRef = new Chart(ctx, config);
-            
-            chart.css("display", "block");
+        if ($(this).text() === 'chart') {
+            $(this).text('close');
+            let chartTypes = $('div#sheet-chart-types');
+            chartTypes.show();
+            $(chartTypes, 'button').click(function(e) {
+                drawChart($(e.target).text());
+            });
+            $(chartTypes, 'button:first-child').click();
         } else {
-            chartRef.destroy();
-            chartRef = {};
-            chart.css("display", "none");
+            $(this).text('chart');
+            $('div#sheet-chart-types').hide();
+            $("div.canvas-container").hide();
         }
     });
     
@@ -834,6 +774,101 @@ function populateSheetTables(types) {
     $("div#sheet-net-worth span").text(jsondb.currency + " " + netWorth.toFixed(2));
 }
 
+function drawChart(qq) {
+    let twoDaySmoother = function(prev, curr, ix) {
+        if (ix % 2 == 0) { 
+            //console.log("first branch: " + curr + " " + ix);
+            prev.unshift(curr);
+            //console.log(prev);
+            return prev;                    
+        } else {
+            //console.log("second branch : " + curr);
+            prev[0][0] = (prev[0][0] + curr[0])/2;
+            prev[0][1] = (prev[0][1] + curr[1])/2;
+            return prev;
+        }
+    };
+    
+    let threeDaySmoother = function(prev, curr, ix) {
+        if (ix % 3 == 0) {
+            prev.unshift(curr); 
+            return prev;
+        } if (ix % 3 == 1) {
+            prev[0][0] = (prev[0][0] + curr[0])/2;
+            prev[0][1] = (prev[0][1] + curr[1])/2;
+            return prev;
+        } if (ix % 3 == 2) {
+            prev[0][0] = (prev[0][0]*2 + curr[0])/3;
+            prev[0][1] = (prev[0][1]*2 + curr[1])/3;
+            return prev;
+        }
+    };
+    
+    let worths = (function(qq) {    
+        if (qq === 'q1') {
+            return jsondb.calculateWorthByDay()
+                    .filter((a) => a[2] > -1 && a[2] < 3); }
+        if (qq === 'q2') {
+            return jsondb.calculateWorthByDay()
+                    .filter((a) => a[2] > 2 && a[2] < 6); }
+        if (qq === 'q3') {
+            return jsondb.calculateWorthByDay()
+                    .filter((a) => a[2] > 5 && a[2] < 9); }
+        if (qq === 'q4') {
+            return jsondb.calculateWorthByDay()
+                    .filter((a) => a[2] > 8 && a[2] < 12); }
+        return jsondb.calculateWorthByDay()
+                .reduce(threeDaySmoother, []).reverse();
+    })(qq);
+    
+    let grossworths = worths.map((a) => Math.round(a[0]*100)/100);
+    let networths = worths.map((a) => Math.round(a[1]*100)/100);
+    
+    let nodeColors1 = worths.map(
+        (a) => (a[2] % 2 == 0 ? "#33DCFF" : "#A0FF33"));
+    let nodeColors2 = worths.map(
+        (a) => (a[2] % 2 == 0 ? "red" : "yellow"));
+    
+    let labels2 = worths.map((a) => a[3]);
+    
+    //console.log(labels);
+    let data = {
+        labels: labels2,
+        datasets: [
+            {
+                label: "Gross",
+                data: grossworths,
+                fill: false,
+                borderColor: "rgba(0,0,200,0.2)",
+                backgroundColor: nodeColors1
+            },
+            {
+                label: "Net",
+                data: networths,
+                fill: false,
+                borderColor: "rgba(200,0,0,0.2)",
+                backgroundColor: nodeColors2
+            }
+        ]
+    };
+    
+    let config = {
+        type: 'line',
+        data: data,
+        options: {
+            legend: {display: false},
+            maintainAspectRatio: false,
+            responsive: true
+        }
+    };
+    
+    let ctx = document.querySelector('div.canvas-container canvas').getContext('2d');
+    if (typeof chartRef.destroy !== 'undefined') chartRef.destroy();
+    chartRef = {};
+    chartRef = new Chart(ctx, config);
+    $('div.canvas-container').show();
+}
+
 function swapColorTheme(colorTheme) {
     if (colorTheme === "none") {
         $("#w3-theme-color").attr("href", "");
@@ -890,7 +925,7 @@ function download(data, filename, type) {
 <main class="w3-theme-l5">
 <section id="sheet">
     <h1>You 2022</h1>
-    <div class="canvas-container"><canvas id="chart-worth"></canvas></div>
+    <div class="canvas-container"><canvas></canvas></div>
     <div id="sheet-template">
         <div id="sheet-monthly-add">
             <button>Copy to spreadsheet</button>
@@ -920,6 +955,13 @@ function download(data, filename, type) {
     <div class="grid-container">
         <div id="sheet-title-box">
             <button id="sheet-options-chart">chart</button>
+            <div id='sheet-chart-types'>
+                <button>year</button>
+                <button>q1</button>
+                <button>q2</button>
+                <button>q3</button>
+                <button>q4</button>
+            </div>
 			<button id="sheet-options-template">template</button>
         </div>
         <div id="sheet-gross-worth">
