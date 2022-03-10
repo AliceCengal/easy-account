@@ -243,7 +243,10 @@ p#load-preview {        white-space: pre; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-const today = new Date();
+const TODAY = new Date();
+const VERSION = 2.0;
+const ENTER_KEY = 13;
+
 var chartRef = {};
 var jsondb = {
     name: "You",
@@ -263,7 +266,7 @@ var jsondb = {
 function AccountDatabase(name, year) {
     this.name = name;
     this.year = year;
-    this.version = 1.0;
+    this.version = VERSION;
     this.template_monthly = [];
     this.template_yearly = [];
     this.transactions = [];
@@ -310,7 +313,7 @@ function AccountDatabase(name, year) {
         //console.log(date);
         this.transactions.push({
             id: (frontid + 1),
-            date: date.setFullYear(this.year) / 1000,
+            date: date.setFullYear(this.year),
             name: name,
             type: type,
             amount: amount
@@ -320,14 +323,14 @@ function AccountDatabase(name, year) {
     
     this.getTypeForMonth = function(type, month) {
         return this.transactions.filter(function(a) {
-            let d = new Date(a.date * 1000);
+            let d = new Date(a.date);
             return d.getMonth() === month && a.type === type;
         });
     };
     
     this.isThisMonthTrx = function(month) {
         return this.transactions.filter(function(a) {
-            return new Date(a.date * 1000).getMonth() === month;
+            return new Date(a.date).getMonth() === month;
         }).length;
     };
     
@@ -336,7 +339,7 @@ function AccountDatabase(name, year) {
     };
     
     this.getDateString = function(trx) {
-        let d = new Date(trx.date * 1000);
+        let d = new Date(trx.date);
         return d.toLocaleDateString()
                 .split(/[-./]/g)
                 .filter((a) => a < 32)
@@ -356,7 +359,7 @@ function AccountDatabase(name, year) {
             let networth = 0;
             while (trxIter.length > 0) {
                 //console.log(trxIter[0]);
-                let d = new Date( trxIter[0].date * 1000  );
+                let d = new Date( trxIter[0].date );
                 
                 if (d.getMonth() === dateIter.getMonth() && 
                     d.getDate() === dateIter.getDate()) {
@@ -377,7 +380,11 @@ function AccountDatabase(name, year) {
                 
             }
             
-            arr[ix] = [ grossworth, networth, dateIter.getMonth(), dateIter.toLocaleDateString() ];
+            arr[ix] = [ 
+                grossworth, 
+                networth, 
+                dateIter.getMonth(), 
+                dateIter.toLocaleDateString() ];
             
             if (ix !== 0) { 
                 arr[ix][0] += arr[ix - 1][0];
@@ -391,6 +398,32 @@ function AccountDatabase(name, year) {
 }
 
 function accountDatabaseFromFile(o) {
+    if (typeof o.version == 'undefined' || o.version < VERSION)
+        return legacyImport(o);
+    
+    let accountDB = new AccountDatabase(o.name, o.year);
+    if (typeof(o.currency) !== 'undefined')       accountDB.currency = o.currency;
+    if (typeof(o.colorTheme) !== 'undefined')     accountDB.colorTheme = o.colorTheme;
+    
+    o.template_monthly.forEach(function(curr) {
+        accountDB.addMonthlyExpense(curr.name, curr.amount);
+    });
+    
+    o.template_yearly.forEach(function(curr) {
+        accountDB.addYearlyExpense(curr.name, curr.amount);
+    });
+    
+    o.transactions.forEach(function(curr) {
+        accountDB.addTransaction(
+                curr.date, 
+                curr.name,
+                curr.type,
+                curr.amount);
+    });
+    return accountDB;
+}
+
+function legacyImport(o) {
     let accountDB = new AccountDatabase(o.name, o.year);
     if (typeof(o.currency) !== 'undefined')       accountDB.currency = o.currency;
     if (typeof(o.colorTheme) !== 'undefined')     accountDB.colorTheme = o.colorTheme;
@@ -415,7 +448,7 @@ function accountDatabaseFromFile(o) {
 
 $(document).ready(function() {
     // set current year to the copyright statement
-    $("span#copy-current-year").text(today.getFullYear());
+    $("span#copy-current-year").text(TODAY.getFullYear());
     
     // setup styling
     $("button").addClass("w3-hover-theme").addClass("w3-theme-l4");
@@ -426,15 +459,15 @@ $(document).ready(function() {
 
     // initialize New form
     $("input#new-name").val("You");
-    $("input#new-year").val(today.getFullYear());
+    $("input#new-year").val(TODAY.getFullYear());
     
     // The user's browser have different formats for date input and output
     // This will show a hint to the user to how they should write their date
     $("input#new-date-fmt").val(
-        today.toLocaleDateString()
+        TODAY.toLocaleDateString()
             .split(/[-./]/g)
             .filter((a) => a < 32)
-            .join(today.toLocaleDateString().match(/[-./]/g)[0]));
+            .join(TODAY.toLocaleDateString().match(/[-./]/g)[0]));
     
     // Dynamically swap the page's stylesheet
     $("select#new-color-theme").change(function(e) {
@@ -552,11 +585,11 @@ $(document).ready(function() {
             let transactionDateInput = $("input#sheet-new-" + currType + "-date").val();
             let transactionDate = (function() {
                 if (transactionDateInput === "") {
-                    return today.getLocaleDateString();
+                    return TODAY.getLocaleDateString();
                 } else {
                     let d = new Date(transactionDateInput);
                     if (d.toString() === "Invalid Date") {
-                        return today.getLocaleDateString();
+                        return TODAY.getLocaleDateString();
                     } else {
                         return d.setFullYear(jsondb.year);
                     }
@@ -585,7 +618,7 @@ $(document).ready(function() {
         
         // If ENTER is pressed on the input field, trigger click on the Add button
         $("table#sheet-" + currType + "-table input").on("keyup", function(e) {
-            if (e.which == 13) {
+            if (e.which == ENTER_KEY) {
                 e.preventDefault();
                 $("button#sheet-add-" + currType).click();
             }
@@ -622,7 +655,7 @@ $(document).ready(function() {
     
     // Pressing enter adds to the template
     $("#sheet-monthly-table input").on("keyup", function(e){
-        if (e.which === 13) {
+        if (e.which === ENTER_KEY) {
             e.preventDefault();
             jsondb.addMonthlyExpense(
                 $("input#sheet-monthly-new-detail").val(),
@@ -657,7 +690,7 @@ $(document).ready(function() {
     
     // Pressing enter adds to the template
     $("#sheet-yearly-table input").on("keyup", function(e){
-        if (e.which === 13) {
+        if (e.which === ENTER_KEY) {
             e.preventDefault();
             jsondb.addYearlyExpense(
                 $("input#sheet-yearly-new-detail").val(),
