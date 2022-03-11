@@ -298,27 +298,26 @@ function AccountDatabase(name, year) {
         if (this.transactions.length == 0) {
             frontid = 0;
         } else {
-            this.transactions.sort(function(a, b) { return b.id - a.id});
-            frontid = this.transactions[0].id;
+            frontid = this.transactions.map(a => a.id).reduce((a,b) => Math.max(a,b));
         }
-        //console.log(dateInput);
         
         let date = new Date(dateInput);
         if (date.toString() === "Invalid Date") {
             alert("Invalid Date Format");
-            console.log(dateInput);
-            return;
+            return console.log(dateInput);
         }
         
-        //console.log(date);
-        this.transactions.push({
+        let trx = {
             id: (frontid + 1),
             date: date.setFullYear(this.year),
             name: name,
             type: type,
             amount: amount
-        });
-        this.transactions.sort(function(a, b) { return b.date - a.date});
+        };
+        
+        let ix = this.transactions.findIndex((t)=> trx.date > t.date );
+        if (ix === -1)  this.transactions.push(trx)
+        else            this.transactions.splice(ix, 0, trx);
     };
     
     this.getTypeForMonth = function(type, month) {
@@ -360,10 +359,7 @@ function AccountDatabase(name, year) {
             while (trxIter.length > 0) {
                 //console.log(trxIter[0]);
                 let d = new Date( trxIter[0].date );
-                
-                if (d.getMonth() === dateIter.getMonth() && 
-                    d.getDate() === dateIter.getDate()) {
-                    //console.log(d);
+                if (d.toDateString() === dateIter.toDateString()) {
                     let trx = trxIter.shift();
                     if (trx.type === "expense") {
                         grossworth -= Number(trx.amount);
@@ -374,10 +370,7 @@ function AccountDatabase(name, year) {
                     } else if (trx.type === "obligation") {
                         networth += Number(trx.amount);
                     }
-                    
-                    if (trxIter.length === 0) break;
                 } else break;
-                
             }
             
             arr[ix] = [ 
@@ -401,6 +394,7 @@ function accountDatabaseFromFile(o) {
     if (typeof o.version == 'undefined' || o.version < VERSION)
         return legacyImport(o);
     
+    // version 2.0
     let accountDB = new AccountDatabase(o.name, o.year);
     if (typeof(o.currency) !== 'undefined')       accountDB.currency = o.currency;
     if (typeof(o.colorTheme) !== 'undefined')     accountDB.colorTheme = o.colorTheme;
@@ -424,6 +418,8 @@ function accountDatabaseFromFile(o) {
 }
 
 function legacyImport(o) {
+
+    // version 1.0
     let accountDB = new AccountDatabase(o.name, o.year);
     if (typeof(o.currency) !== 'undefined')       accountDB.currency = o.currency;
     if (typeof(o.colorTheme) !== 'undefined')     accountDB.colorTheme = o.colorTheme;
