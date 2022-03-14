@@ -581,11 +581,11 @@ $(document).ready(function() {
             let transactionDateInput = $("input#sheet-new-" + currType + "-date").val();
             let transactionDate = (function() {
                 if (transactionDateInput === "") {
-                    return TODAY.getLocaleDateString();
+                    return TODAY.toLocaleDateString();
                 } else {
                     let d = new Date(transactionDateInput);
                     if (d.toString() === "Invalid Date") {
-                        return TODAY.getLocaleDateString();
+                        return TODAY.toLocaleDateString();
                     } else {
                         return d.setFullYear(jsondb.year);
                     }
