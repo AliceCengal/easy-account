@@ -89,6 +89,9 @@ div#chart-container {
     display: none;
     width: 100%;
 }
+div#chart-container div {
+    padding: 0px;
+}
 div#chart-container div:last-child {
     position: relative;
     width: 95%;
@@ -879,11 +882,11 @@ function drawChart(qq) {
         }
     };
     
+    $('div#chart-container').show();
     let ctx = document.querySelector('div#chart-container canvas').getContext('2d');
     if (typeof chartRef.destroy !== 'undefined') chartRef.destroy();
     chartRef = {};
     chartRef = new Chart(ctx, config);
-    $('div#chart-container').show();
 }
 
 function swapColorTheme(colorTheme) {
