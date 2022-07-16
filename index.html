@@ -85,9 +85,12 @@ section#help p { text-align: justify; }
     font-size: large;
     white-space: pre;
 }
-div.canvas-container {
-    position: relative;
+div#chart-container {
     display: none;
+    width: 100%;
+}
+div#chart-container div:last-child {
+    position: relative;
     width: 95%;
     height: 300px;
     margin: 0 0 auto 0;
@@ -587,20 +590,18 @@ $(document).ready(function() {
     });
     
     // Chart unhide/hide functions
-    $('div#sheet-title-box div').hide();
+    let chartTypes = $('div#chart-container > div').first();
+    $('button', chartTypes).click(function(e) {
+        drawChart($(e.target).text());
+    });
+    
     $("button#sheet-options-chart").click(function(e) {
         if ($(this).text() === 'chart') {
             $(this).text('close');
-            let chartTypes = $('div#sheet-title-box div');
-            chartTypes.show();
-            $(chartTypes, 'button').click(function(e) {
-                drawChart($(e.target).text());
-            });
-            $(chartTypes, 'button:first-child').click();
+            $('button:first-child', chartTypes).click();
         } else {
             $(this).text('chart');
-            $('div#sheet-title-box div').hide();
-            $("div.canvas-container").hide();
+            $("div#chart-container").hide();
         }
     });
     
@@ -878,11 +879,11 @@ function drawChart(qq) {
         }
     };
     
-    let ctx = document.querySelector('div.canvas-container canvas').getContext('2d');
+    let ctx = document.querySelector('div#chart-container canvas').getContext('2d');
     if (typeof chartRef.destroy !== 'undefined') chartRef.destroy();
     chartRef = {};
     chartRef = new Chart(ctx, config);
-    $('div.canvas-container').show();
+    $('div#chart-container').show();
 }
 
 function swapColorTheme(colorTheme) {
@@ -941,8 +942,16 @@ function download(data, filename, type) {
 <main class="w3-theme-l5">
 <section id="sheet">
     <h1>You 2022</h1>
-    <div class="canvas-container"><canvas></canvas></div>
-    <div id="sheet-template">
+    <div id="chart-container" class='modal-sheet'>
+        <div>
+            <button>year</button>
+            <button>q1</button>
+            <button>q2</button>
+            <button>q3</button>
+            <button>q4</button>
+        </div>
+        <div><canvas></canvas></div></div>
+    <div id="sheet-template" class='modal-sheet'>
         <div id='averaged-flow'>
             <p><span>Average income</span><span>:</span><span></span></p>
             <p><span>Average expense</span><span>:</span><span></span></p>
@@ -975,13 +984,6 @@ function download(data, filename, type) {
     <div class="grid-container">
         <div id="sheet-title-box">
             <button id="sheet-options-chart">chart</button>
-            <div>
-                <button>year</button>
-                <button>q1</button>
-                <button>q2</button>
-                <button>q3</button>
-                <button>q4</button>
-            </div>
 			<button id="sheet-options-template">template</button>
         </div>
         <div id="sheet-gross-worth">
