@@ -631,11 +631,11 @@ $(document).ready(function() {
     });
     
     // Chart unhide/hide functions
-    $('div#sheet-chart-types').hide();
+    $('div#sheet-title-box div').hide();
     $("button#sheet-options-chart").click(function(e) {
         if ($(this).text() === 'chart') {
             $(this).text('close');
-            let chartTypes = $('div#sheet-chart-types');
+            let chartTypes = $('div#sheet-title-box div');
             chartTypes.show();
             $(chartTypes, 'button').click(function(e) {
                 drawChart($(e.target).text());
@@ -643,7 +643,7 @@ $(document).ready(function() {
             $(chartTypes, 'button:first-child').click();
         } else {
             $(this).text('chart');
-            $('div#sheet-chart-types').hide();
+            $('div#sheet-title-box div').hide();
             $("div.canvas-container").hide();
         }
     });
