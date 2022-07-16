@@ -124,14 +124,11 @@ div#averaged-flow span{ display: table-cell }
     margin: 0px;
     padding: 0px;
     display: grid;
-    grid-template-columns: auto auto auto 10px;
-    grid-template-rows: auto auto auto auto auto auto 
-            auto auto auto auto auto auto auto auto auto;
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
 }
 div#sheet-title-box {
     padding: 0px;
-    grid-area: 1 / 1 / span 1 / span 1; 
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -149,7 +146,6 @@ div#sheet-title-box div * {
 }
 div#sheet-gross-worth {
     padding: 0px;
-    grid-area: 1 / 2 / span 1 / span 1;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -157,7 +153,6 @@ div#sheet-gross-worth {
 }
 div#sheet-net-worth {
     padding: 0px;
-    grid-area: 1 / 3 / span 1 / span 1;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -174,45 +169,6 @@ table.sheet-template-table {
 table.sheet-template-table td {
     text-align: center;
 }
-#sheet-income-table {          grid-area: 2 / 1 / span 1 / span 1;    }
-#sheet-expense-table {         grid-area: 2 / 2 / span 1 / span 1; }
-#sheet-obligation-table {      grid-area: 2 / 3 / span 1 / span 1;    }
-#sheet-income-table-0 {        grid-area: 3 / 1 / span 1 / span 1;    }
-#sheet-expense-table-0 {       grid-area: 3 / 2 / span 1 / span 1; }
-#sheet-obligation-table-0 {    grid-area: 3 / 3 / span 1 / span 1;    }
-#sheet-income-table-1 {        grid-area: 4 / 1 / span 1 / span 1;    }
-#sheet-expense-table-1 {       grid-area: 4 / 2 / span 1 / span 1; }
-#sheet-obligation-table-1 {    grid-area: 4 / 3 / span 1 / span 1;    }
-#sheet-income-table-2 {        grid-area: 5 / 1 / span 1 / span 1;    }
-#sheet-expense-table-2 {       grid-area: 5 / 2 / span 1 / span 1; }
-#sheet-obligation-table-2 {    grid-area: 5 / 3 / span 1 / span 1;    }
-#sheet-income-table-3 {        grid-area: 6 / 1 / span 1 / span 1;    }
-#sheet-expense-table-3 {       grid-area: 6 / 2 / span 1 / span 1; }
-#sheet-obligation-table-3 {    grid-area: 6 / 3 / span 1 / span 1;    }
-#sheet-income-table-4 {        grid-area: 7 / 1 / span 1 / span 1;    }
-#sheet-expense-table-4 {       grid-area: 7 / 2 / span 1 / span 1; }
-#sheet-obligation-table-4 {    grid-area: 7 / 3 / span 1 / span 1;    }
-#sheet-income-table-5 {        grid-area: 8 / 1 / span 1 / span 1;    }
-#sheet-expense-table-5 {       grid-area: 8 / 2 / span 1 / span 1; }
-#sheet-obligation-table-5 {    grid-area: 8 / 3 / span 1 / span 1;    }
-#sheet-income-table-6 {        grid-area: 9 / 1 / span 1 / span 1;    }
-#sheet-expense-table-6 {       grid-area: 9 / 2 / span 1 / span 1; }
-#sheet-obligation-table-6 {    grid-area: 9 / 3 / span 1 / span 1;    }
-#sheet-income-table-7 {        grid-area: 10 / 1 / span 1 / span 1;    }
-#sheet-expense-table-7 {       grid-area: 10 / 2 / span 1 / span 1;     }
-#sheet-obligation-table-7 {    grid-area: 10 / 3 / span 1 / span 1;    }
-#sheet-income-table-8 {        grid-area: 11 / 1 / span 1 / span 1;    }
-#sheet-expense-table-8 {       grid-area: 11 / 2 / span 1 / span 1;     }
-#sheet-obligation-table-8 {    grid-area: 11 / 3 / span 1 / span 1;    }
-#sheet-income-table-9 {        grid-area: 12 / 1 / span 1 / span 1;    }
-#sheet-expense-table-9 {       grid-area: 12 / 2 / span 1 / span 1;     }
-#sheet-obligation-table-9 {    grid-area: 12 / 3 / span 1 / span 1;    }
-#sheet-income-table-10 {       grid-area: 13 / 1 / span 1 / span 1;    }
-#sheet-expense-table-10 {      grid-area: 13 / 2 / span 1 / span 1;     }
-#sheet-obligation-table-10 {   grid-area: 13 / 3 / span 1 / span 1;    }
-#sheet-income-table-11 {       grid-area: 14 / 1 / span 1 / span 1;    }
-#sheet-expense-table-11 {      grid-area: 14 / 2 / span 1 / span 1;     }
-#sheet-obligation-table-11 {   grid-area: 14 / 3 / span 1 / span 1;    }
 .grid-container h4 {
     display: inline;
     margin: 0px;
