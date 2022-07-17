@@ -465,6 +465,7 @@ $(document).ready(function() {
             $("input#new-year").val());
         
         // switch page to the spreadsheet
+        $("div.modal-sheet").hide();
         location.hash = "h-sheet";
         $("button#h-sheet").prop("disabled", false);
     });
@@ -506,6 +507,7 @@ $(document).ready(function() {
                 swapColorTheme(jsondb.colorTheme);
                 
                 // change page
+                $("div.modal-sheet").hide();
                 location.hash = "h-sheet";
                 $("button#h-sheet").prop("disabled", false);
             });
@@ -1228,7 +1230,20 @@ function download(data, filename, type) {
     <p>When the friend pays the loan back, record it as an income, and also a negative
     obligation by the same amount.</p>
     <span class="text-code">INCOME     | 24-May | loan to John |  $300</span><br>
-    <span class="text-code">OBLIGATION | 24-May | loan to John | -$300</span>
+    <span class="text-code">OBLIGATION | 24-May | loan to John | -$300</span><br>
+    <p><strong>Example 3: </strong> You borrow $300 from a friend, promising to
+    pay it back in three months. Record it as an income, and also as a negative obligation
+    by the same amount. This signals that while there is more money in your 
+    bank account, this is not part of your discretionary fund. This is an 
+    example of deferred expense. Even though you haven't paid back the loan yet,
+    you pretend as if you have paid the loan by recording it as a negative
+    obligation.</p>
+    <span class="text-code">INCOME     | 24-Feb | loan from John |  $300</span><br>
+    <span class="text-code">OBLIGATION | 24-Feb | loan from John | -$300</span>
+    <p>When the you pay the loan back, record it as an expense, and also a positive
+    obligation by the same amount.</p>
+    <span class="text-code">EXPENSE    | 24-May | loan from John | $300</span><br>
+    <span class="text-code">OBLIGATION | 24-May | loan from John | $300</span>
     <h4>Q: How do I record investments and savings?</h4>
     <p>A: You could record your deposits into an investment account as an expense,
     paired with a positive obligation. This signals that while your checking account 
