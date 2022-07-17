@@ -85,9 +85,11 @@ section#help p { text-align: justify; }
     font-size: large;
     white-space: pre;
 }
-div#chart-container {
-    display: none;
+div.modal-sheet {
+    display:none;
     width: 100%;
+    margin: 0px;
+    padding: 0px;
 }
 div#chart-container div {
     padding: 0px;
@@ -98,10 +100,6 @@ div#chart-container div:last-child {
     margin: 0;
 }
 div#sheet-template {
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    display: none;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
 }
@@ -116,38 +114,14 @@ div#averaged-flow span{ display: table-cell }
 }
 .grid-container {
     width: 100%;
-    margin: 0px;
+    margin: 24px 0px 0px 0px;
     padding: 0px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
 }
-div#sheet-title-box {
-    padding: 0px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-end; 
-}
-div#sheet-title-box * { margin: 5px; }
-div#sheet-title-box div {
-    margin: 4px;
-    padding: 0px;
-    border: 2px solid gray;
-}
-div#sheet-title-box div * {
-    padding: 5px;
-    margin: 4px;
-}
-div#sheet-gross-worth {
-    padding: 0px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-div#sheet-net-worth {
-    padding: 0px;
+.grid-container > div { padding: 0px; }
+div#sheet-gross-worth, div#sheet-net-worth {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -601,13 +575,12 @@ $(document).ready(function() {
     });
     
     $("button#sheet-options-chart").click(function(e) {
-        if ($(this).text() === 'chart') {
-            $(this).text('close');
+        let panel2 = $('div#chart-container');
+        if (panel2.css("display") === "none") {
             $("div.modal-sheet").hide();
             $('button:first-child', chartTypes).click();
         } else {
-            $(this).text('chart');
-            $("div#chart-container").hide();
+            panel2.hide();
         }
     });
     
@@ -995,11 +968,11 @@ function download(data, filename, type) {
         </table>
         <div><!-- Spacer --></div>
         <div id="sheet-monthly-add">
-            <button>Copy to spreadsheet</button>
+            <button>Copy to below</button>
             <input type="text" placeholder="month" size="2">
         </div>
         <div id="sheet-yearly-add">
-            <button>Copy to spreadsheet</button>
+            <button>Copy to below</button>
             <input type="text" placeholder="month" size="2">
         </div>
     </div>
