@@ -99,10 +99,6 @@ div#chart-container div:last-child {
     height: 300px;
     margin: 0;
 }
-div#sheet-template {
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-}
 div#averaged-flow { 
     display: table;
 }
@@ -114,7 +110,6 @@ div#averaged-flow span{ display: table-cell }
 }
 .grid-container {
     width: 100%;
-    margin: 24px 0px 0px 0px;
     padding: 0px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -173,20 +168,7 @@ const VERSION = 3.0;
 const ENTER_KEY = 13;
 
 var chartRef = {};
-var jsondb = {
-    name: "You",
-    year: "2022",
-    currency: "",
-    colorTheme: 'deep-purple',
-    template_monthly: [
-        {    name: "", amount: ""    }
-    ],
-    template_yearly: [
-        {    name: "", amount: ""    }
-    ],
-    transactions: [
-    ]
-};
+var jsondb   = new AccountDatabase('You', 2022);
 
 function AccountDatabase(name, year) {
     this.name = name;
@@ -200,6 +182,12 @@ function AccountDatabase(name, year) {
     this.INCOME = "INCOME";
     this.MONTHLY = "MONTHLY";
     this.YEARLY = "YEARLY";
+    
+    this.TYPE_INCOME = "income";
+    this.TYPE_EXPENSE = "expense";
+    this.TYPE_OBLIGATION = "obligation";
+    
+    this.TYPES = [this.TYPE_INCOME, this.TYPE_EXPENSE, this.TYPE_OBLIGATION];
     
     this.addTemplate = function(trxType, name, amount) {
         this.template.push({trxType: trxType, name: name, amount: amount});
@@ -525,7 +513,7 @@ $(document).ready(function() {
     //// Spreadsheet section ////
     
     // Add handlers to add transactions into the ledger
-    ["income", "expense", "obligation"].forEach(function(currType) {
+    jsondb.TYPES.forEach(function(currType) {
         $("button#sheet-add-" + currType).click(function(e) {
             let transactionDateInput = $("input#sheet-new-" + currType + "-date").val();
             let transactionDate = (function() {
@@ -583,6 +571,17 @@ $(document).ready(function() {
             $('button:first-child', chartTypes).click();
         } else {
             panel2.hide();
+        }
+    });
+    
+    $('button#sheet-options-chart2').click(function(e) {
+        let panel3 = $('div#sheet-chart2');
+        if (panel3.css('display') === 'none') {
+            $('div.modal-sheet').hide();
+            panel3.css("display", "grid");
+            drawProportionChart();
+        } else {
+            panel3.hide();
         }
     });
     
@@ -713,6 +712,10 @@ function populateTemplateTables() {
     });
 }
 
+const AccountSummary = {
+    totals: [0.0, 0.0, 0.0]
+};
+
 function populateSheetTables(types) {
     let refreshTable;
     if (typeof types == 'undefined') {
@@ -722,8 +725,12 @@ function populateSheetTables(types) {
     } else {
         refreshTable = types;
     }
-    refreshTable.forEach(function(currType) {
+    AccountSummary.totals = [0.0, 0.0, 0.0];
+    
+    refreshTable.forEach(function(currType, ix) {
         var tableRowGroup = 0;
+        
+        // fill the tables from top to bottom, hence reverse month order
         [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0].forEach(function(currMonth) {
             $("table#sheet-" + currType + "-table-" + tableRowGroup).empty();
             let currentMonthTrx = jsondb.getTypeForMonth(currType, currMonth);
@@ -750,6 +757,7 @@ function populateSheetTables(types) {
                         populateSheetTables();
                     });
                     $("table#sheet-" + currType + "-table-" + tableRowGroup).append(row);
+                    AccountSummary.totals[ix] += Number(curr.amount);
                 });
                 tableRowGroup++;
             }
@@ -762,15 +770,13 @@ function populateSheetTables(types) {
         }
         
         // Calculate the sum for the column
-        $("#sheet-" + currType + "-total").text(
-            sumjq("table[id^='sheet-" + currType + "-table-'] td:last-child").toFixed(2)
-        );
+        $("#sheet-" + currType + "-total").text(AccountSummary.totals[ix].toFixed(2));
     });
     
-    let totalIncome = Number($("#sheet-income-total").text());
-    let totalExpense = Number($("#sheet-expense-total").text());
+    let totalIncome = AccountSummary.totals[0];
+    let totalExpense = AccountSummary.totals[1];
     let grossWorth =  totalIncome - totalExpense;
-    let netWorth = grossWorth + Number($("#sheet-obligation-total").text());
+    let netWorth = grossWorth + AccountSummary.totals[2];
     $("div#sheet-gross-worth span").text(jsondb.currency + " " + grossWorth.toFixed(2));
     $("div#sheet-net-worth span").text(jsondb.currency + " " + netWorth.toFixed(2));
     
@@ -872,10 +878,67 @@ function drawChart(qq) {
     };
     
     $('div#chart-container').show();
-    let ctx = document.querySelector('div#chart-container canvas').getContext('2d');
+    
+    // dispose of previous chart to prevent ghosts
     if (typeof chartRef.destroy !== 'undefined') chartRef.destroy();
     chartRef = {};
+    
+    // Create new chart
+    let ctx = document.querySelector('div#chart-container canvas').getContext('2d');
     chartRef = new Chart(ctx, config);
+}
+
+chartRef2 = [];
+
+function drawProportionChart() {
+    let trxs = jsondb.transactions
+        .map( (tt)=> [
+            tt.type, 
+            tt.name.split(/\s*-\s*/, 1)[0]  , 
+            tt.amount ] )
+        .filter( (tt)=> tt[1] !== '' )
+        .map( (tt)=> [tt[0]+'%%'+tt[1], tt[2]]) ;
+    
+    let gtrxs = groupBy(trxs, (tt)=> tt[0]);
+    
+    for (key of gtrxs.keys()) {
+        let sum = gtrxs.get(key).reduce((prev, next)=> prev+Number(next[1]), 0.0);
+        gtrxs.set(key, sum);
+    }
+    
+    let trxs2 = Array.from(gtrxs.entries(), 
+            (vv)=> Array.of(vv[0].split('%%'), Math.round(vv[1])).flat());
+    let gdata = groupBy(trxs2, (d)=> d[0]);
+    
+    let configs = jsondb.TYPES.map((tt)=> gdata.get(tt)).map((vv)=> {
+        vv.sort((a, b)=> b[2] - a[2]);
+        let colors = colorGen();
+        let data = {
+            labels: vv.map( (v)=> v[1] ),
+            datasets: [{
+                label: vv[0][0],
+                data: vv.map( (v)=> v[2] ),
+                backgroundColor: vv.map( (v)=> colors.next().value )
+            }],
+        };
+        
+        let cc = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                legend: {display: false}
+            }
+        }; 
+        return cc;
+    });
+    
+    // dispose of previous chart to prevent ghosts
+    chartRef2.forEach((c)=> { if (typeof c.destroy !== 'undefined') c.destroy() });
+    
+    // create new chart
+    chartRef2 = Array.from(document.querySelectorAll('div#sheet-chart2 canvas'))
+            .map((c, ix)=> 
+                new Chart(c.getContext('2d'), configs[ix]));
 }
 
 function swapColorTheme(colorTheme) {
@@ -915,6 +978,49 @@ function download(data, filename, type) {
         }, 0); 
     }
 }
+
+/**
+ * @description
+ * Takes an Array<V>, and a grouping function,
+ * and returns a Map of the array grouped by the grouping function.
+ *
+ * @param list An array of type V.
+ * @param keyGetter A Function that takes the the Array type V as an input, and returns a value of type K.
+ *                  K is generally intended to be a property key of V.
+ *
+ * @returns Map of the array grouped by the grouping function.
+ */
+//export function groupBy<K, V>(list: Array<V>, keyGetter: (input: V) => K): Map<K, Array<V>> {
+//    const map = new Map<K, Array<V>>();
+function groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+         const key = keyGetter(item);
+         const collection = map.get(key);
+         if (!collection) {
+             map.set(key, [item]);
+         } else {
+             collection.push(item);
+         }
+    });
+    return map;
+}
+
+const COLORS = [
+    "#1abc9c", "#16a085", "#2ecc71",  "#27ae60", 
+    "#3498db", "#2980b9", "#9b59b6", "#8e44ad", 
+    "#34495e", "#2c3e50", "#f1c40f", "#f39c12", 
+    "#e67e22", "#d35400", "#e74c3c", "#c0392b" ];
+
+function* colorGen() {
+    var ix = 0;
+    while (true) {
+        yield COLORS[ix];
+        ix += 3;
+        if (ix >= 16) ix -= 16;
+    }
+}
+
 </script>
 </head>
 <body>
@@ -943,7 +1049,12 @@ function download(data, filename, type) {
             <button>q4</button>
         </div>
         <div><canvas></canvas></div></div>
-    <div id="sheet-template" class='modal-sheet'>
+    <div id='sheet-chart2' class="grid-container modal-sheet">
+        <div><canvas></canvas></div>
+        <div><canvas></canvas></div>
+        <div><canvas></canvas></div>
+    </div>
+    <div id="sheet-template" class='grid-container modal-sheet'>
         <div id='averaged-flow'>
             <p><span>Average income</span><span>:</span><span></span></p>
             <p><span>Average expense</span><span>:</span><span></span></p>
@@ -978,10 +1089,12 @@ function download(data, filename, type) {
             <input type="text" placeholder="month" size="2">
         </div>
     </div>
+    <div><!-- Spacer --> &nbsp; </div>
     <div class="grid-container">
         <div id="sheet-title-box">
-            <button id="sheet-options-chart">chart</button>
-			<button id="sheet-options-template">template</button>
+            <button id="sheet-options-chart">timeline</button>
+            <button id="sheet-options-chart2">proportion</button>
+            <button id="sheet-options-template">template</button>
         </div>
         <div id="sheet-gross-worth">
             <h4>gross worth</h4>
