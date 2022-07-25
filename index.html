@@ -562,6 +562,8 @@ $(document).ready(function() {
         });
     });
     
+    Chart.defaults.global.defaultFontSize = 16;
+    
     // Chart unhide/hide functions
     let chartTypes = $('div#chart-container > div').first();
     $('button', chartTypes).click(function(e) {
@@ -840,8 +842,8 @@ function drawChart(qq) {
                 .reduce(threeDaySmoother, []).reverse();
     })(qq);
     
-    let grossworths = worths.map((a) => Math.round(a[0]*100)/100);
-    let networths   = worths.map((a) => Math.round(a[1]*100)/100);
+    let grossworths = worths.map((a) => a[0]);
+    let networths   = worths.map((a) => a[1]);
     
     let nodeColors1 = worths.map(
         (a) => (a[2] % 2 == 0 ? "#33DCFF" : "#A0FF33"));
@@ -877,7 +879,14 @@ function drawChart(qq) {
         options: {
             legend: {display: false},
             maintainAspectRatio: false,
-            responsive: true
+            responsive: true,
+            tooltips: { 
+                callbacks: { 
+                    label: function(item, data) {
+                        dataset = data.datasets[item.datasetIndex]
+                        return dataset.label + ': ' + jsondb.currency +
+                            dataset.data[item.index].toFixed(2);
+                    }}}
         }
     };
     
@@ -932,7 +941,20 @@ function drawProportionChart() {
             options: {
                 legend: {display: false},
                 maintainAspectRatio: false,
-                responsive: true
+                responsive: true,
+                tooltips: {
+                  callbacks: {
+                    label: function(item, data) {
+                        let dataset = data.datasets[item.datasetIndex];
+                        let total = dataset.data.reduce((prev, curr)=> prev+curr);
+                        let currentValue = dataset.data[item.index];
+                        let percentage = (currentValue/total) * 100;
+                        return data.labels[item.index] + ": " + 
+                            jsondb.currency + currentValue + 
+                            " (" + percentage.toFixed(1) + "%)";
+                    }
+                  }
+                }
             }
         }; 
         return cc;
