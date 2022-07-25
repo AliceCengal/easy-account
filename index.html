@@ -94,10 +94,14 @@ div.modal-sheet {
 div#chart-container div {
     padding: 0px;
 }
-div#chart-container div:last-child {
+div#chart-container > div:last-child {
     position: relative;
     height: 300px;
     margin: 0;
+}
+div#sheet-chart2 > div {
+    position: relative;
+    aspect-ratio: 1
 }
 div#averaged-flow { 
     display: table;
@@ -926,7 +930,9 @@ function drawProportionChart() {
             type: 'doughnut',
             data: data,
             options: {
-                legend: {display: false}
+                legend: {display: false},
+                maintainAspectRatio: false,
+                responsive: true
             }
         }; 
         return cc;
