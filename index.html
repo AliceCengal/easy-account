@@ -924,6 +924,8 @@ function drawProportionChart() {
     let gdata = groupBy(trxs2, (d)=> d[0]);
     
     let configs = jsondb.TYPES.map((tt)=> gdata.get(tt)).map((vv)=> {
+        if (typeof vv == 'undefined') { return null; }
+        
         vv.sort((a, b)=> b[2] - a[2]);
         let colors = colorGen();
         let data = {
